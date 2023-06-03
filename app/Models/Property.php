@@ -10,5 +10,5 @@ class Property extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'description', 'location'];
+    protected $fillable = ['name', 'slug', 'description', 'location', 'address', 'phone', 'email'];
 }

@@ -1,0 +1,306 @@
+[
+    {
+        "name": "list properties",
+        "group": "properties"
+    },
+    {
+        "name": "view property",
+        "group": "properties"
+    },
+    {
+        "name": "create property",
+        "group": "properties"
+    },
+    {
+        "name": "edit property",
+        "group": "properties"
+    },
+    {
+        "name": "delete property",
+        "group": "properties"
+    },
+    {
+        "name": "list houses",
+        "group": "houses"
+    },
+    {
+        "name": "view house",
+        "group": "houses"
+    },
+    {
+        "name": "create house",
+        "group": "houses"
+    },
+    {
+        "name": "edit house",
+        "group": "houses"
+    },
+    {
+        "name": "delete house",
+        "group": "houses"
+    },
+    {
+        "name": "list tenants",
+        "group": "tenants"
+    },
+    {
+        "name": "view tenant",
+        "group": "tenants"
+    },
+    {
+        "name": "create tenant",
+        "group": "tenants"
+    },
+    {
+        "name": "edit tenant",
+        "group": "tenants"
+    },
+    {
+        "name": "delete tenant",
+        "group": "tenants"
+    },
+    {
+        "name": "view tenant statement",
+        "group": "tenants"
+    },
+    {
+        "name": "list invoices",
+        "group": "invoices"
+    },
+    {
+        "name": "view invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "create invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "edit invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "delete invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "approve invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "reverse invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "print invoice",
+        "group": "invoices"
+    },
+    {
+        "name": "list payments",
+        "group": "payments"
+    },
+    {
+        "name": "create payment",
+        "group": "payments"
+    },
+    {
+        "name": "view payment",
+        "group": "payments"
+    },
+    {
+        "name": "edit payment",
+        "group": "payments"
+    },
+    {
+        "name": "delete payment",
+        "group": "payments"
+    },
+    {
+        "name": "approve payment",
+        "group": "payments"
+    },
+    {
+        "name": "reverse payment",
+        "group": "payments"
+    },
+    {
+        "name": "print payment receipt",
+        "group": "payments"
+    },
+    {
+        "name": "list bank accounts",
+        "group": "bank accounts"
+    },
+    {
+        "name": "create bank account",
+        "group": "bank accounts"
+    },
+    {
+        "name": "view bank account",
+        "group": "bank accounts"
+    },
+    {
+        "name": "edit bank account",
+        "group": "bank accounts"
+    },
+    {
+        "name": "deactivate bank account",
+        "group": "bank accounts"
+    },
+    {
+        "name": "list bank account adjustments",
+        "group": "bank accounts"
+    },
+    {
+        "name": "create bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "view bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "edit bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "delete bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "approve bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "reverse bank account adjustment",
+        "group": "bank accounts"
+    },
+    {
+        "name": "list expense categories",
+        "group": "expenses"
+    },
+    {
+        "name": "view expense category",
+        "group": "expenses"
+    },
+    {
+        "name": "create expense category",
+        "group": "expenses"
+    },
+    {
+        "name": "edit expense category",
+        "group": "expenses"
+    },
+    {
+        "name": "delete expense category",
+        "group": "expenses"
+    },
+    {
+        "name": "list expenses",
+        "group": "expenses"
+    },
+    {
+        "name": "view expense",
+        "group": "expenses"
+    },
+    {
+        "name": "create expense",
+        "group": "expenses"
+    },
+    {
+        "name": "edit expense",
+        "group": "expenses"
+    },
+    {
+        "name": "delete expense",
+        "group": "expenses"
+    },
+    {
+        "name": "approve expense",
+        "group": "expenses"
+    },
+    {
+        "name": "reverse expense",
+        "group": "expenses"
+    },
+    {
+        "name": "list users",
+        "group": "users"
+    },
+    {
+        "name": "create user",
+        "group": "users"
+    },
+    {
+        "name": "view user",
+        "group": "users"
+    },
+    {
+        "name": "edit user",
+        "group": "users"
+    },
+    {
+        "name": "deactivate user",
+        "group": "users"
+    },
+    {
+        "name": "list roles",
+        "group": "roles"
+    },
+    {
+        "name": "create role",
+        "group": "roles"
+    },
+    {
+        "name": "view role",
+        "group": "roles"
+    },
+    {
+        "name": "edit role",
+        "group": "roles"
+    },
+    {
+        "name": "delete role",
+        "group": "roles"
+    },
+    {
+        "name": "view debtors report",
+        "group": "reports"
+    },
+    {
+        "name": "view deposits report",
+        "group": "reports"
+    },
+    {
+        "name": "view invoice report",
+        "group": "reports"
+    },
+    {
+        "name": "view lease report",
+        "group": "reports"
+    },
+    {
+        "name": "view vat report",
+        "group": "reports"
+    },
+    {
+        "name": "view comprehensive tenant report",
+        "group": "reports"
+    },
+    {
+        "name": "manage general settings",
+        "group": "settings"
+    },
+    {
+        "name": "manage taxes",
+        "group": "settings"
+    },
+    {
+        "name": "view activity logs",
+        "group": "system"
+    },
+    {
+        "name": "manage system backups",
+        "group": "system"
+    }
+]

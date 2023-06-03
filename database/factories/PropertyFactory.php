@@ -17,7 +17,10 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $name = $this->faker->name,
+            'slug' => str($name)->slug(),
+            'description' => $this->faker->text,
+            'location' => $this->faker->address,
         ];
     }
 }
