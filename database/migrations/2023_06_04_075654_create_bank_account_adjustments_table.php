@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_accounts', function (Blueprint $table) {
+        Schema::create('bank_account_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('code')->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->text('description')->nullable();
+            $table->string('status')->default('pending approval');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bank_accounts');
+        Schema::dropIfExists('bank_account_adjustments');
     }
 };
