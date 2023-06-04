@@ -1,32 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import ApplicationMark from '@/Components/ApplicationMark.vue';
-import Banner from '@/Components/Banner.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-
-defineProps({
-    title: String,
-});
-
-const showingNavigationDropdown = ref(false);
-
-const switchToTeam = (team) => {
-    router.put(route('current-team.update'), {
-        team_id: team.id,
-    }, {
-        preserveState: false,
-    });
-};
-
-const logout = () => {
-    router.post(route('logout'));
-};
-</script>
-
 <template>
     <div>
         <Head :title="title" />
@@ -51,6 +22,27 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
+
+                                <NavLink :href="route('invoices.index')" :active="route().current('invoices.index')">
+                                    Invoices
+                                </NavLink>
+
+                                <NavLink :href="route('payments.index')" :active="route().current('payments.index')">
+                                    Payments
+                                </NavLink>
+
+                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
+                                    Expenses
+                                </NavLink>
+
+                                <NavLink :href="route('bank-account-adjustments.index')" :active="route().current('bank-account-adjustments.index')">
+                                    Account adjustments
+                                </NavLink>
+
+                                <manage-dropdown-menu-component />
+
+                                <reports-dropdown-menu-component />
+
                             </div>
                         </div>
 
@@ -287,5 +279,38 @@ const logout = () => {
                 <slot />
             </main>
         </div>
+        <toast-notification />
     </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import ApplicationMark from '@/Components/ApplicationMark.vue';
+import Banner from '@/Components/Banner.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import ToastNotification from "@/Layouts/Components/ToastNotification.vue";
+import ManageDropdownMenuComponent from "@/Layouts/Components/ManageDropdownMenuComponent.vue";
+import ReportsDropdownMenuComponent from "@/Layouts/Components/ReportsDropdownMenuComponent.vue";
+
+defineProps({
+    title: String,
+});
+
+const showingNavigationDropdown = ref(false);
+
+const switchToTeam = (team) => {
+    router.put(route('current-team.update'), {
+        team_id: team.id,
+    }, {
+        preserveState: false,
+    });
+};
+
+const logout = () => {
+    router.post(route('logout'));
+};
+</script>

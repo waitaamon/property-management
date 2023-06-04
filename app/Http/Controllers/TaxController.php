@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBankAccountRequest;
-use App\Http\Requests\UpdateBankAccountRequest;
-use App\Models\Accounts\BankAccount;
+use App\Http\Requests\StoreTaxRequest;
+use App\Http\Requests\UpdateTaxRequest;
+use App\Models\Tax;
 
-class BankAccountController extends Controller
+class TaxController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class BankAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBankAccountRequest $request)
+    public function store(StoreTaxRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class BankAccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(BankAccount $bankAccount)
+    public function show(Tax $tax)
     {
         //
     }
@@ -43,7 +43,7 @@ class BankAccountController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(BankAccount $bankAccount)
+    public function edit(Tax $tax)
     {
         //
     }
@@ -51,7 +51,7 @@ class BankAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBankAccountRequest $request, BankAccount $bankAccount)
+    public function update(UpdateTaxRequest $request, Tax $tax)
     {
         //
     }
@@ -59,7 +59,7 @@ class BankAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BankAccount $bankAccount)
+    public function destroy(Tax $tax)
     {
         //
     }

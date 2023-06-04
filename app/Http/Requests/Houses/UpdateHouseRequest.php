@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Houses;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBankAccountRequest extends FormRequest
+class UpdateHouseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

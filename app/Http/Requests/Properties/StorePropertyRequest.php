@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Properties;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTenantRequest extends FormRequest
+class StorePropertyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

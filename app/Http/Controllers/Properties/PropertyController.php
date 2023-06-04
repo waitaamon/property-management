@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Properties;
 
-use App\Models\Property;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePropertyRequest;
-use App\Http\Requests\UpdatePropertyRequest;
+use App\Http\Requests\Properties\StorePropertyRequest;
+use App\Http\Requests\Properties\UpdatePropertyRequest;
+use App\Models\Property;
 
 class PropertyController extends Controller
 {

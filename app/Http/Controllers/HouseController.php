@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreHouseRequest;
-use App\Http\Requests\UpdateHouseRequest;
+use App\Http\Requests\Houses\StoreHouseRequest;
+use App\Http\Requests\Houses\UpdateHouseRequest;
 use App\Models\House;
 
 class HouseController extends Controller

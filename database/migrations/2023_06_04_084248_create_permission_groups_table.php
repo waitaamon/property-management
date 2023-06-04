@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_account_adjustment_items', function (Blueprint $table) {
+        Schema::create('permission_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('adjustment_id')->constrained('bank_account_adjustments');
-            $table->foreignId('account_id')->constrained('bank_accounts');
-            $table->decimal('from')->default(0);
-            $table->decimal('to')->default(0);
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bank_account_adjustment_items');
+        Schema::dropIfExists('permission_groups');
     }
 };

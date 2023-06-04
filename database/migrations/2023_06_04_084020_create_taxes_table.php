@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_account_adjustment_items', function (Blueprint $table) {
+        Schema::create('taxes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('adjustment_id')->constrained('bank_account_adjustments');
-            $table->foreignId('account_id')->constrained('bank_accounts');
-            $table->decimal('from')->default(0);
-            $table->decimal('to')->default(0);
+            $table->string('name');
+            $table->decimal('rate');
+            $table->boolean('is_default')->default(false);
+            $table->text('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bank_account_adjustment_items');
+        Schema::dropIfExists('taxes');
     }
 };

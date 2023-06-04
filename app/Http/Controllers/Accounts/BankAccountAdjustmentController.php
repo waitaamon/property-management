@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Accounts;
 
-use App\Http\Requests\StoreBankAccountAdjustmentRequest;
-use App\Http\Requests\UpdateBankAccountAdjustmentRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Accounts\StoreBankAccountAdjustmentRequest;
+use App\Http\Requests\Accounts\UpdateBankAccountAdjustmentRequest;
 use App\Models\Accounts\BankAccountAdjustment;
 
 class BankAccountAdjustmentController extends Controller
