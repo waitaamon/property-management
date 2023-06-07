@@ -11,7 +11,7 @@ class Property extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'description', 'location', 'address', 'phone', 'email'];
+    protected $fillable = ['name', 'description', 'location', 'address', 'phone', 'email'];
 
     public function houses(): HasMany
     {

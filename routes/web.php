@@ -20,6 +20,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     ]);
 
     Route::apiResource('users', \App\Http\Controllers\UsersController::class)->withTrashed();
+    Route::apiResource('properties', \App\Http\Controllers\Properties\PropertyController::class);
     Route::apiResource('tenants', \App\Http\Controllers\Tenants\TenantController::class)->withTrashed();
     Route::apiResource('bank-accounts', \App\Http\Controllers\Accounts\BankAccountController::class)->withTrashed();
     Route::apiResource('expense-categories', \App\Http\Controllers\Expenses\ExpenseCategoryController::class)->withTrashed();
