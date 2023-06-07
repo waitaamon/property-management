@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Traits\HasApproval;
 use App\Traits\HasSerialCode;
 use App\Enums\ApprovalStatus;
-use App\Models\Suppliers\Supplier;
+use App\Models\Suppliers\Vendor;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,7 +38,7 @@ class Purchase extends Model
 
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Vendor::class);
     }
 
     public function products(): BelongsToMany

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Expenses;
 use Inertia\Inertia;
 use App\Enums\ApprovalStatus;
 use App\Models\Expenses\Expense;
-use App\Models\Suppliers\Supplier;
+use App\Models\Suppliers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Actions\Payments\CreatePayment;
 use App\Jobs\UpdateModelApprovalAction;
@@ -42,7 +42,7 @@ class ExpenseController extends Controller
             'filters' => request()->all(),
             'statuses' => ApprovalStatus::cases(),
             'expenses' => ExpenseResource::collection($expenses),
-            'suppliers' => SupplierResource::collection(Supplier::select('id', 'name')->get()),
+            'suppliers' => SupplierResource::collection(Vendor::select('id', 'name')->get()),
             'categories' => ExpenseCategoryResource::collection(ExpenseCategory::select('id', 'name')->get()),
             'can' => [
                 'create' => auth()->user()->can('create', Expense::class)
@@ -144,15 +144,15 @@ class ExpenseController extends Controller
         return redirect()->route('expenses.index');
     }
 
-    protected function getPaymentSupplier(): Supplier|null
+    protected function getPaymentSupplier(): Vendor|null
     {
-        return request()->filled('supplier') ? Supplier::find(request('supplier')) : null;
+        return request()->filled('supplier') ? Vendor::find(request('supplier')) : null;
     }
 
     protected function createEditData(): array
     {
         $accounts = BankAccount::select('id', 'name')->get();
-        $suppliers = Supplier::select('id', 'name')->get();
+        $suppliers = Vendor::select('id', 'name')->get();
         $categories = ExpenseCategory::select('id', 'name')->get();
 
         return [

@@ -8,7 +8,7 @@ use App\Enums\ApprovalStatus;
 use App\Models\Sales\SaleOrder;
 use App\Models\Payments\Payment;
 use App\Models\Expenses\Expense;
-use App\Models\Suppliers\Supplier;
+use App\Models\Suppliers\Vendor;
 use App\Models\Products\Purchase;
 use Illuminate\Queue\SerializesModels;
 use App\Models\CreditNotes\CreditNote;
@@ -47,7 +47,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ($this->status == ApprovalStatus::APPROVED) {
             match (true) {
                 $this->model instanceof SaleOrder => CreateAccountStatement::dispatch($this->model, $this->model->total_amount),
-                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, $this->model->accountable instanceof Supplier),
+                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, $this->model->accountable instanceof Vendor),
                 $this->model instanceof CreditNote, $this->model instanceof Purchase, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
                 default => null
             };
@@ -56,7 +56,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ( $this->status == ApprovalStatus::REVERSED) {
             match (true) {
                 $this->model instanceof SaleOrder => CreateAccountStatement::dispatch($this->model, $this->model->total_amount, false),
-                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, !$this->model->accountable instanceof Supplier),
+                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, !$this->model->accountable instanceof Vendor),
                 $this->model instanceof CreditNote, $this->model instanceof Purchase, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount),
             };
         }

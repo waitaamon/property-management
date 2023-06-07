@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Payments;
 use Inertia\Inertia;
 use App\Models\Payments\Payment;
 use App\Models\Customers\Customer;
-use App\Models\Suppliers\Supplier;
+use App\Models\Suppliers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Actions\Payments\UpdatePayment;
 use App\Actions\Payments\CreatePayment;
@@ -30,11 +30,11 @@ class PaymentController extends Controller
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
             ->when(
                 request()->filled('account_type'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Supplier::class])
+                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Vendor::class])
             )
             ->when(
                 request()->filled('account_type') && request()->filled('user'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Supplier::class], fn($query) => $query->where('id', request('user')))
+                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Vendor::class], fn($query) => $query->where('id', request('user')))
             )
             ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('created_at', '<=', request()->date('to')))
@@ -48,7 +48,7 @@ class PaymentController extends Controller
             'filters' => request()->all(),
             'account_types' => ['customer', 'supplier'],
             'payments' => PaymentResource::collection($payments),
-            'suppliers' => SupplierResource::collection(Supplier::select('id', 'name')->get()),
+            'suppliers' => SupplierResource::collection(Vendor::select('id', 'name')->get()),
             'customers' => CustomerResource::collection(Customer::select('id', 'name')->get()),
             'accounts' => BankAccountResource::collection(BankAccount::select('id', 'name')->get()),
             'can' => [
@@ -130,7 +130,7 @@ class PaymentController extends Controller
     {
         return match (request('account_type')) {
             'customer' => Customer::findOrFail(request('account')),
-            'supplier' => Supplier::findOrFail(request('account')),
+            'supplier' => Vendor::findOrFail(request('account')),
             default => throw new ModelNotFoundException()
         };
     }
@@ -138,7 +138,7 @@ class PaymentController extends Controller
     protected function createEditData(): array
     {
         $customers = Customer::select('id', 'name')->get();
-        $suppliers = Supplier::select('id', 'name')->get();
+        $suppliers = Vendor::select('id', 'name')->get();
         $accounts = BankAccount::select('id', 'name')->get();
 
         return [
