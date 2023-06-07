@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Http\Resources\Properties;
+namespace App\Http\Resources\Houses;
 
-use App\Http\Resources\Houses\HouseResource;
+use App\Http\Resources\Properties\PropertyResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PropertyResource extends JsonResource
+class HouseResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->whenHas('name'),
-            'email' => $this->whenHas('email'),
-            'phone' => $this->whenHas('phone'),
-            'address' => $this->whenHas('address'),
-            'location' => $this->whenHas('location'),
+            'rent' => $this->whenHas('rent'),
+            'deposit' => $this->whenHas('deposit'),
+            'is_active' => $this->whenHas('is_active'),
             'created_at' => $this->whenHas('created_at'),
+            'description' => $this->whenHas('description'),
 
-            'houses' => HouseResource::collection($this->whenLoaded('houses')),
+            'property' => new PropertyResource($this->whenLoaded('property')),
 
             'can' => [
                 'view' => auth()->user()->can('view', $this->resource),

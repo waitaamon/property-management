@@ -14,7 +14,7 @@ class StorePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:tenants'],
+            'name' => ['required', 'string', 'max:255', 'unique:properties'],
             'phone' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'max:255'],
