@@ -23,21 +23,21 @@
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink :href="route('invoices.index')" :active="route().current('invoices.index')">
-                                    Invoices
-                                </NavLink>
+<!--                                <NavLink :href="route('invoices.index')" :active="route().current('invoices.index')">-->
+<!--                                    Invoices-->
+<!--                                </NavLink>-->
 
-                                <NavLink :href="route('payments.index')" :active="route().current('payments.index')">
-                                    Payments
-                                </NavLink>
+<!--                                <NavLink :href="route('payments.index')" :active="route().current('payments.index')">-->
+<!--                                    Payments-->
+<!--                                </NavLink>-->
 
-                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">
-                                    Expenses
-                                </NavLink>
+<!--                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">-->
+<!--                                    Expenses-->
+<!--                                </NavLink>-->
 
-                                <NavLink :href="route('bank-account-adjustments.index')" :active="route().current('bank-account-adjustments.index')">
-                                    Account adjustments
-                                </NavLink>
+<!--                                <NavLink :href="route('bank-account-adjustments.index')" :active="route().current('bank-account-adjustments.index')">-->
+<!--                                    Account adjustments-->
+<!--                                </NavLink>-->
 
                                 <manage-dropdown-menu-component />
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Accounts\AccountStatement;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;

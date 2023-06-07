@@ -21,7 +21,7 @@ class BankAccountController extends Controller
             ->paginate(request('perPage', 10))
             ->withQueryString();
 
-        return Inertia::render('BankAccounts/Index', [
+        return Inertia::render('Accounts/Index', [
             'accounts' => BankAccountResource::collection($accounts),
             'filters' =>  request()->all('search'),
             'can' => [
@@ -45,7 +45,7 @@ class BankAccountController extends Controller
     {
         $this->authorize('view', $bankAccount);
 
-        return Inertia::render('BankAccounts/Show', [
+        return Inertia::render('Accounts/Show', [
             'account' => new BankAccountResource($bankAccount)
         ]);
     }

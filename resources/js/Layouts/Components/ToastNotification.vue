@@ -1,10 +1,12 @@
 <script setup>
-const toast = useToast()
 import {computed, watch} from "vue";
 import {useToast} from "vue-toastification";
 import {usePage} from "@inertiajs/vue3";
 
+const toast = useToast()
+
 let alert = computed(() => usePage().props.flash.toast)
+
 watch(alert, (val) => {
     if (!val) return
     toast(val.message, {
@@ -14,7 +16,8 @@ watch(alert, (val) => {
         }
     })
 })
+
 </script>
 <template>
-    {{ alert }}
+    <div></div>
 </template>

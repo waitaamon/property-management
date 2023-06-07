@@ -4,7 +4,6 @@ namespace App\Http\Resources\Accounts;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\BankAccounts\BankAccountAdjustmentResource;
 
 class BankAccountResource extends JsonResource
 {
