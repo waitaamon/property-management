@@ -57,7 +57,7 @@
                     <table-td class="lowercase">{{ user.email }}</table-td>
                     <table-td class="capitalize">{{ user.is_active ? 'active' : 'inactive' }}</table-td>
                     <table-td>
-                        <button v-if="user.can.view" type="button" @click.prevent="Inertia.get(route('users.show', user.id))">
+                        <button v-if="user.can.view" type="button" @click.prevent="router.get(route('users.show', user.id))">
                             <EyeIcon aria-hidden="true" class="w-4 h-4 text-blue-800 ml-1"/>
                         </button>
                         <button v-if="user.can.edit" type="button" @click.prevent="editUser(user)">
