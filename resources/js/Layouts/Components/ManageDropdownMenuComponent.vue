@@ -41,7 +41,7 @@ import {Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 
 const dropdownItems = [
     // {name: 'Properties', route: 'properties.index'},
-    // {name: 'Tenants', route: 'tenants.index'},
+    {name: 'Tenants', route: 'tenants.index'},
     // {name: 'Houses', route: 'houses.index'},
     {name: 'Bank accounts', route: 'bank-accounts.index'},
     {name: 'Expense categories', route: 'expense-categories.index'},

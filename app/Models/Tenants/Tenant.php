@@ -2,17 +2,16 @@
 
 namespace App\Models\Tenants;
 
-use App\Models\Accounts\AccountStatement;
-use App\Models\Invoice;
-use App\Models\Payment;
 use Carbon\Carbon;
+use App\Models\Invoices\Invoice;
+use App\Models\Payments\Payment;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Accounts\AccountStatement;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\{HasMany,MorphMany};
 
 class Tenant extends Model
 {
@@ -26,7 +25,7 @@ class Tenant extends Model
     {
         return new Attribute(get: function () {
             $payment = $this->payments()->latest()->first();
-            return $payment ? $payment->created_at : null;
+            return $payment?->created_at;
         });
     }
 

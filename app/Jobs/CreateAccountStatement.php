@@ -50,8 +50,8 @@ class CreateAccountStatement implements ShouldQueue
     protected function getAccountableModel(): Model|null
     {
         return match (true) {
-            $this->model instanceof SaleOrder => $this->model->customer,
-            $this->model instanceof CreditNote => $this->model->customer,
+            $this->model instanceof SaleOrder => $this->model->tenant,
+            $this->model instanceof CreditNote => $this->model->tenant,
             $this->model instanceof Payment => $this->model->accountable,
             $this->model instanceof Purchase || $this->model instanceof Expense => $this->model->supplier,
             default => null

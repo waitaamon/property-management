@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers\Payments;
 
+use App\Http\Resources\Accounts\BankAccountResource;
+use App\Http\Resources\Tenants\TenantResource;
+use App\Models\Accounts\BankAccount;
+use App\Models\Tenants\Tenant;
 use Inertia\Inertia;
 use App\Models\Payments\Payment;
-use App\Models\Customers\Customer;
-use App\Models\Suppliers\Vendor;
 use App\Http\Controllers\Controller;
-use App\Actions\Payments\UpdatePayment;
-use App\Actions\Payments\CreatePayment;
-use App\Models\BankAccounts\BankAccount;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\Payments\PaymentResource;
-use App\Http\Resources\Customers\CustomerResource;
-use App\Http\Resources\Suppliers\SupplierResource;
 use App\Http\Requests\Payments\StorePaymentRequest;
 use App\Http\Requests\Payments\UpdatePaymentRequest;
-use App\Http\Resources\BankAccounts\BankAccountResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PaymentController extends Controller
@@ -30,11 +26,11 @@ class PaymentController extends Controller
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
             ->when(
                 request()->filled('account_type'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Vendor::class])
+                fn(Builder $query) => $query->whereHasMorph('accountable', [Tenant::class])
             )
             ->when(
                 request()->filled('account_type') && request()->filled('user'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [request('account_type') == 'customer' ? Customer::class : Vendor::class], fn($query) => $query->where('id', request('user')))
+                fn(Builder $query) => $query->whereHasMorph('accountable', [Tenant::class], fn($query) => $query->where('id', request('user')))
             )
             ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('created_at', '<=', request()->date('to')))
@@ -46,10 +42,9 @@ class PaymentController extends Controller
 
         return Inertia::render('Payments/Index', [
             'filters' => request()->all(),
-            'account_types' => ['customer', 'supplier'],
+            'account_types' => ['tenant', 'supplier'],
             'payments' => PaymentResource::collection($payments),
-            'suppliers' => SupplierResource::collection(Vendor::select('id', 'name')->get()),
-            'customers' => CustomerResource::collection(Customer::select('id', 'name')->get()),
+            'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
             'accounts' => BankAccountResource::collection(BankAccount::select('id', 'name')->get()),
             'can' => [
                 'create' => auth()->user()->can('create', Payment::class)
@@ -129,23 +124,20 @@ class PaymentController extends Controller
     protected function getAccountableAccount()
     {
         return match (request('account_type')) {
-            'customer' => Customer::findOrFail(request('account')),
-            'supplier' => Vendor::findOrFail(request('account')),
+            'tenant' => Tenant::findOrFail(request('account')),
             default => throw new ModelNotFoundException()
         };
     }
 
     protected function createEditData(): array
     {
-        $customers = Customer::select('id', 'name')->get();
-        $suppliers = Vendor::select('id', 'name')->get();
+        $tenants = Tenant::select('id', 'name')->get();
         $accounts = BankAccount::select('id', 'name')->get();
 
         return [
-            'customers' => CustomerResource::collection($customers),
-            'suppliers' => SupplierResource::collection($suppliers),
+            'tenants' => TenantResource::collection($tenants),
             'bank_accounts' => BankAccountResource::collection($accounts),
-            'account_types' => ['customer', 'supplier'],
+            'account_types' => ['tenant', 'supplier'],
         ];
     }
 }

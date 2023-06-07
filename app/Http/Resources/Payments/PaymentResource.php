@@ -2,14 +2,12 @@
 
 namespace App\Http\Resources\Payments;
 
+use App\Http\Resources\Accounts\BankAccountResource;
+use App\Models\Tenants\Tenant;
 use Illuminate\Http\Request;
-use App\Models\Customers\Customer;
-use App\Models\Suppliers\Vendor;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ApprovalResource;
-use App\Http\Resources\Sales\SaleOrderResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\BankAccounts\BankAccountResource;
 use App\Http\Resources\Accounts\AccountStatementResource;
 
 class PaymentResource extends JsonResource
@@ -34,8 +32,7 @@ class PaymentResource extends JsonResource
 
             'account_type' => $this->whenLoaded('accountable', function () {
                 return match (true) {
-                    $this->accountable instanceof Customer => 'customer',
-                    $this->accountable instanceof Vendor => 'supplier',
+                    $this->accountable instanceof Tenant => 'tenant',
                     default => ''
                 };
             }),
