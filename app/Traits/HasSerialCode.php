@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Model;
 
 trait HasSerialCode

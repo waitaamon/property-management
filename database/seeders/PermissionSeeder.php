@@ -6,7 +6,6 @@ use App\Models\PermissionGroup;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 
 class PermissionSeeder extends Seeder
@@ -16,7 +15,7 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = Storage::json(resource_path('var/permissions.json'));
+        $permissions = File::json(resource_path('var/permissions.json'));
 
         collect($permissions)->each(function ($permission) {
 

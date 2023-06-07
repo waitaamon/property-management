@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tenants\StoreTenantRequest;
 use App\Http\Requests\Tenants\UpdateTenantRequest;
-use App\Models\Tenant;
+use App\Models\Tenants\Tenant;
 
 class TenantController extends Controller
 {

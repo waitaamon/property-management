@@ -45,8 +45,8 @@ const dropdownItems = [
     // {name: 'Houses', route: 'houses.index'},
     {name: 'Bank accounts', route: 'bank-accounts.index'},
     // {name: 'Expense categories', route: 'expense-categories.index'},
-    // {name: 'Users', route: 'users.index'},
-    // {name: 'Role & Permissions', route: 'roles.index'},
+    {name: 'Users', route: 'users.index'},
+    {name: 'Role & Permissions', route: 'roles.index'},
     // {name: 'Audit Trail', route: 'audit'},
 ]
 </script>
