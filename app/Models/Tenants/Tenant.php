@@ -3,6 +3,7 @@
 namespace App\Models\Tenants;
 
 use Carbon\Carbon;
+use App\Models\Lease;
 use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
@@ -62,6 +63,11 @@ class Tenant extends Model
             ->first();
 
         return $statement ? $statement->balance : 0;
+    }
+
+    public function leases(): HasMany
+    {
+        return $this->hasMany(Lease::class);
     }
 
     public function invoices(): HasMany

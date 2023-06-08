@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Houses;
 
+use App\Http\Resources\Properties\PropertyResource;
+use App\Models\Property;
 use Inertia\Inertia;
 use App\Models\House;
 use App\Http\Controllers\Controller;
@@ -16,6 +18,7 @@ class HouseController extends Controller
         $this->authorize('viewAny', House::class);
 
         $houses = House::query()
+            ->with('property:id,name')
             ->when(request()->filled('search'), fn($query) => $query->search(['name'], request('search')))
             ->paginate(request('perPage', 10))
             ->withQueryString();
@@ -23,6 +26,7 @@ class HouseController extends Controller
         return Inertia::render('Houses/Index', [
             'houses' => HouseResource::collection($houses),
             'filters' => request()->all('search'),
+            'properties' => PropertyResource::collection(Property::select('id', 'name')->get()),
             'statistics' => [
                 ['name' => 'Total Houses', 'value' => number_format($houses->total()), 'icon' => 'BriefcaseIcon'],
             ],
@@ -38,9 +42,7 @@ class HouseController extends Controller
 
         House::create([
             ...$request->only('name', 'rent', 'deposit', 'description', 'is_active'),
-                [
-                    'property_id' => $request->property
-                ]
+            'property_id' => $request->property
         ]);
 
         $this->toast('Successfully added house');
@@ -69,9 +71,7 @@ class HouseController extends Controller
 
         $house->update([
             ...$request->only('name', 'rent', 'deposit', 'description', 'is_active'),
-            [
                 'property_id' => $request->property
-            ]
         ]);
 
         $this->toast('Successfully updated house');

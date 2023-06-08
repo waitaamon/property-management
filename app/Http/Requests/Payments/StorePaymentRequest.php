@@ -17,9 +17,8 @@ class StorePaymentRequest extends FormRequest
         return [
             'note' => ['nullable', 'string'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'bank_account' => ['required', 'integer', 'exists:bank_accounts,id'],
-            'account_type' => ['required', 'string', 'in:tenant,supplier'],
-            'account' => ['required', 'integer']
+            'tenant' => ['required', 'integer', 'exists:tenants,id'],
+            'account' => ['required', 'integer', 'exists:bank_accounts,id'],
         ];
     }
 }

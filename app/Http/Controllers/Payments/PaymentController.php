@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Payments;
 
-use App\Http\Resources\Accounts\BankAccountResource;
-use App\Http\Resources\Tenants\TenantResource;
-use App\Models\Accounts\BankAccount;
-use App\Models\Tenants\Tenant;
+use App\Enums\ApprovalStatus;
 use Inertia\Inertia;
+use App\Models\Tenants\Tenant;
 use App\Models\Payments\Payment;
+use App\Models\Accounts\BankAccount;
 use App\Http\Controllers\Controller;
+use App\Actions\Payments\CreatePayment;
+use App\Actions\Payments\UpdatePayment;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\Tenants\TenantResource;
 use App\Http\Resources\Payments\PaymentResource;
 use App\Http\Requests\Payments\StorePaymentRequest;
+use App\Http\Resources\Accounts\BankAccountResource;
 use App\Http\Requests\Payments\UpdatePaymentRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PaymentController extends Controller
 {
@@ -22,27 +24,20 @@ class PaymentController extends Controller
         $this->authorize('viewAny', Payment::class);
 
         $payments = Payment::query()
-            ->with('paymentable', 'accountable', 'bankAccount:id,name')
+            ->with('tenant', 'bankAccount:id,name')
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
-            ->when(
-                request()->filled('account_type'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [Tenant::class])
-            )
-            ->when(
-                request()->filled('account_type') && request()->filled('user'),
-                fn(Builder $query) => $query->whereHasMorph('accountable', [Tenant::class], fn($query) => $query->where('id', request('user')))
-            )
+            ->when(request()->filled('tenant'), fn(Builder $query) => $query->where('tenant_id', request('tenant')))
             ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('created_at', '<=', request()->date('to')))
             ->when(request()->filled('from'), fn(Builder $query) => $query->whereDate('created_at', '>=', request()->date('from')))
-            ->when(request()->filled('search'), fn($query) => $query->search(['code', 'accountable.name', 'paymentable.code'], request('search')))
+            ->when(request()->filled('search'), fn($query) => $query->search(['code', 'tenant.name', 'bankAccount.code'], request('search')))
             ->latest()
             ->paginate(request('perPage', 10))
             ->withQueryString();
 
         return Inertia::render('Payments/Index', [
             'filters' => request()->all(),
-            'account_types' => ['tenant', 'supplier'],
+            'statuses' => ApprovalStatus::cases(),
             'payments' => PaymentResource::collection($payments),
             'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
             'accounts' => BankAccountResource::collection(BankAccount::select('id', 'name')->get()),
@@ -65,10 +60,7 @@ class PaymentController extends Controller
     {
         $this->authorize('create', Payment::class);
 
-        CreatePayment::handle(
-            payload: [...$request->only('amount', 'note'), 'account' => request('bank_account'),],
-            account: $this->getAccountableAccount()
-        );
+        CreatePayment::handle($request->validated());
 
         $this->toast('Successfully created payment.');
 
@@ -79,7 +71,7 @@ class PaymentController extends Controller
     {
         $this->authorize('view', $payment);
 
-        $payment->load(['user', 'bankAccount', 'accountable', 'paymentable', 'approvals' => ['user']]);
+        $payment->load(['user', 'bankAccount', 'tenant', 'approvals' => ['user']]);
 
         return Inertia::render('Payments/Show', [
             'payment' => new PaymentResource($payment)
@@ -90,7 +82,7 @@ class PaymentController extends Controller
     {
         $this->authorize('update', $payment);
 
-        $payment->load(['bankAccount', 'paymentable']);
+        $payment->load(['bankAccount', 'tenant']);
 
         return Inertia::render('Payments/Create', [
             ...$this->createEditData(),
@@ -102,10 +94,7 @@ class PaymentController extends Controller
     {
         $this->authorize('update', $payment);
 
-        UpdatePayment::handle($payment, [
-            ...$request->only('note', 'amount'),
-            'account' => request('bank_account')
-        ]);
+        UpdatePayment::handle($payment, $request->validated());
 
         $this->toast('Successfully updated payment.');
 
@@ -121,14 +110,6 @@ class PaymentController extends Controller
         return redirect()->route('payments.index');
     }
 
-    protected function getAccountableAccount()
-    {
-        return match (request('account_type')) {
-            'tenant' => Tenant::findOrFail(request('account')),
-            default => throw new ModelNotFoundException()
-        };
-    }
-
     protected function createEditData(): array
     {
         $tenants = Tenant::select('id', 'name')->get();
@@ -136,8 +117,7 @@ class PaymentController extends Controller
 
         return [
             'tenants' => TenantResource::collection($tenants),
-            'bank_accounts' => BankAccountResource::collection($accounts),
-            'account_types' => ['tenant', 'supplier'],
+            'accounts' => BankAccountResource::collection($accounts),
         ];
     }
 }

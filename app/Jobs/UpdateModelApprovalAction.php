@@ -5,18 +5,14 @@ namespace App\Jobs;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use App\Enums\ApprovalStatus;
-use App\Models\Sales\SaleOrder;
-use App\Models\Payments\Payment;
 use App\Models\Expenses\Expense;
-use App\Models\Suppliers\Vendor;
-use App\Models\Products\Purchase;
+use App\Models\Payments\Payment;
 use Illuminate\Queue\SerializesModels;
-use App\Models\CreditNotes\CreditNote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Models\BankAccounts\BankAccountAdjustment;
+use App\Models\Accounts\BankAccountAdjustment;
 
 class UpdateModelApprovalAction implements ShouldQueue
 {
@@ -34,7 +30,7 @@ class UpdateModelApprovalAction implements ShouldQueue
             'status' =>  $this->status->value
         ]);
 
-        $this->CreateAccountStatement();
+        $this->createAccountStatement();
 
         $this->createBankAccountTransaction();
 
@@ -46,18 +42,16 @@ class UpdateModelApprovalAction implements ShouldQueue
     {
         if ($this->status == ApprovalStatus::APPROVED) {
             match (true) {
-                $this->model instanceof SaleOrder => CreateAccountStatement::dispatch($this->model, $this->model->total_amount),
-                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, $this->model->accountable instanceof Vendor),
-                $this->model instanceof CreditNote, $this->model instanceof Purchase, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
+                $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount),
+                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
                 default => null
             };
         }
 
         if ( $this->status == ApprovalStatus::REVERSED) {
             match (true) {
-                $this->model instanceof SaleOrder => CreateAccountStatement::dispatch($this->model, $this->model->total_amount, false),
-                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, !$this->model->accountable instanceof Vendor),
-                $this->model instanceof CreditNote, $this->model instanceof Purchase, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount),
+                $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount),
+                $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
             };
         }
     }
@@ -67,6 +61,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ($this->status == ApprovalStatus::APPROVED) {
             match (true) {
                 $this->model instanceof Payment => CreateBankAccountTransaction::dispatch($this->model),
+                $this->model instanceof Expense => CreateBankAccountTransaction::dispatch($this->model, false),
                 $this->model instanceof BankAccountAdjustment => $this->model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, $item->action)),
                 default => null,
             };
@@ -74,6 +69,7 @@ class UpdateModelApprovalAction implements ShouldQueue
 
         if ($this->status == ApprovalStatus::REVERSED) {
             match (true) {
+                $this->model instanceof Expense => CreateBankAccountTransaction::dispatch($this->model),
                 $this->model instanceof Payment => CreateBankAccountTransaction::dispatch($this->model, false),
                 $this->model instanceof BankAccountAdjustment => $this->model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, !$item->action)),
             };

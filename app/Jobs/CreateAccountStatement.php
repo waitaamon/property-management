@@ -3,12 +3,9 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use App\Models\Sales\SaleOrder;
 use App\Models\Expenses\Expense;
 use App\Models\Payments\Payment;
-use App\Models\Products\Purchase;
 use Illuminate\Queue\SerializesModels;
-use App\Models\CreditNotes\CreditNote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -36,7 +33,6 @@ class CreateAccountStatement implements ShouldQueue
         $statement->accountable()->associate($account);
 
         $statement->save();
-
     }
 
     protected function getAccountBalance(): float
@@ -44,17 +40,13 @@ class CreateAccountStatement implements ShouldQueue
         $account = $this->getAccountableModel();
 
         return $this->action ? $account->balance + $this->amount : $account->balance - $this->amount;
-
     }
 
-    protected function getAccountableModel(): Model|null
+    protected function getAccountableModel()
     {
         return match (true) {
-            $this->model instanceof SaleOrder => $this->model->tenant,
-            $this->model instanceof CreditNote => $this->model->tenant,
-            $this->model instanceof Payment => $this->model->accountable,
-            $this->model instanceof Purchase || $this->model instanceof Expense => $this->model->supplier,
-            default => null
+             $this->model instanceof Payment => $this->model->tenant,
+             $this->model instanceof Expense => $this->model->category,
         };
     }
 }

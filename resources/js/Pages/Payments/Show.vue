@@ -22,10 +22,10 @@
             <div class="flex justify-between">
 
                 <div class="space-y-3">
-                    <template v-if="payment.data.accountable">
-                        <p>Name: <span class="font-bold">{{ payment.data.accountable.name }}</span></p>
-                        <p>Type: <span class="font-bold">{{ payment.data.account_type }}</span></p>
-                        <p>Pin: <span class="font-bold">{{ payment.data.accountable.pin }}</span></p>
+                    <template v-if="payment.data.tenant">
+                        <p>Name: <span class="font-bold">{{ payment.data.tenant.name }}</span></p>
+                        <p>Phone: <span class="font-bold">{{ payment.data.tenant.phone }}</span></p>
+                        <p>Pin: <span class="font-bold">{{ payment.data.tenant.pin }}</span></p>
                     </template>
                 </div>
 
@@ -52,7 +52,7 @@
                             <table-td>
                                 1.
                             </table-td>
-                            <table-td>{{ payment.data.bank_account.name }}</table-td>
+                            <table-td>{{ payment.data.account.name }}</table-td>
                             <table-td>{{ payment.data.amount.toLocaleString() }}</table-td>
                         </tr>
 
@@ -93,9 +93,9 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import TableTh from "@/Components/Table/TableTh.vue";
 import TableTd from "@/Components/Table/TableTd.vue";
 import DataTable from "@/Components/Table/DataTable.vue";
+import PrintButton from "@/Components/PrintButton.vue";
 import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
 import AppApprovalButtons from "@/Components/AppApprovalButtons.vue";
-import PrintButton from "../../Components/PrintButton.vue";
 
 const props = defineProps({
     payment: Object

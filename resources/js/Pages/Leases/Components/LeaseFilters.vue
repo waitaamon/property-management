@@ -2,18 +2,7 @@
     <table-filters>
         <form class="px-5 py-4 space-y-3" @submit.prevent="submit">
             <div>
-                <InputLabel for="account" value="Filter by bank account"/>
-                <v-select
-                    v-model="form.account"
-                    :options="$page.props.accounts.data"
-                    :reduce="account => account.id"
-                    class="mt-1 block w-full h-full"
-                    label="name"
-                />
-            </div>
-
-            <div>
-                <InputLabel for="tenant" value="Filter by bank tenant"/>
+                <InputLabel for="tenant" value="Filter by tenant"/>
                 <v-select
                     v-model="form.tenant"
                     :options="$page.props.tenants.data"
@@ -22,10 +11,20 @@
                     label="name"
                 />
             </div>
+            <div>
+                <InputLabel for="house" value="Filter by house"/>
+                <v-select
+                    v-model="form.house"
+                    :options="$page.props.houses.data"
+                    :reduce="house => house.id"
+                    class="mt-1 block w-full h-full"
+                    label="name"
+                />
+            </div>
 
             <div>
-                <InputLabel for="status" value="Filter by status"/>
-                <v-select v-model="form.status" :options="$page.props.statuses" class="mt-1 block w-full h-full"/>
+                <InputLabel for="state" value="Filter by state"/>
+                <v-select v-model="form.state" :options="$page.props.states" class="mt-1 block w-full h-full"/>
             </div>
 
             <div>
@@ -63,9 +62,9 @@ const emits = defineEmits(['updateFilters'])
 const form = reactive({
     to: props.filters.to,
     from: props.filters.from,
-    status: props.filters.status ? props.filters.status : '',
-    user: props.filters.user ? parseInt(props.filters.user) : '',
-    account_type: props.filters.account_type ? props.filters.account_type : '',
+    state: props.filters.state ? props.filters.state : '',
+    house: props.filters.house ? parseInt(props.filters.house) : '',
+    tenant: props.filters.tenant ? parseInt(props.filters.tenant) : '',
 })
 
 const submit = () => emits('updateFilters', toRaw(form))

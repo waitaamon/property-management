@@ -2,6 +2,7 @@
 
 namespace App\Models\Payments;
 
+use App\Models\Tenants\Tenant;
 use App\Models\User;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
@@ -12,13 +13,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany, MorphTo};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany};
 
 class Payment extends Model
 {
     use HasFactory, SoftDeletes, HasApproval, HasSerialCode;
 
-    protected $fillable = ['code', 'user_id', 'bank_account_id', 'amount', 'status', 'note'];
+    protected $fillable = ['code', 'user_id', 'bank_account_id', 'tenant_id', 'amount', 'status', 'note'];
 
     protected $casts = [
         'amount' => 'float',
@@ -30,19 +31,14 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
     public function bankAccount(): BelongsTo
     {
         return $this->belongsTo(BankAccount::class);
-    }
-
-    public function paymentable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-    public function accountable(): MorphTo
-    {
-        return $this->morphTo();
     }
 
     public function statements(): MorphMany

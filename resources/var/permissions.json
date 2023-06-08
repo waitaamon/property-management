@@ -1,5 +1,33 @@
 [
     {
+        "name": "list leases",
+        "group": "lease"
+    },
+    {
+        "name": "create lease",
+        "group": "lease"
+    },
+    {
+        "name": "view lease",
+        "group": "lease"
+    },
+    {
+        "name": "edit lease",
+        "group": "lease"
+    },
+    {
+        "name": "delete lease",
+        "group": "lease"
+    },
+    {
+        "name": "approve lease",
+        "group": "lease"
+    },
+    {
+        "name": "terminate lease",
+        "group": "lease"
+    },
+    {
         "name": "list properties",
         "group": "properties"
     },

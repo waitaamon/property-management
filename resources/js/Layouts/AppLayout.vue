@@ -23,13 +23,13 @@
                                     Dashboard
                                 </NavLink>
 
-<!--                                <NavLink :href="route('invoices.index')" :active="route().current('invoices.index')">-->
-<!--                                    Invoices-->
-<!--                                </NavLink>-->
+                                <NavLink :href="route('leases.index')" :active="route().current('leases.index')">
+                                    Leases
+                                </NavLink>
 
-<!--                                <NavLink :href="route('payments.index')" :active="route().current('payments.index')">-->
-<!--                                    Payments-->
-<!--                                </NavLink>-->
+                                <NavLink :active="route().current('payments.index')" :href="route('payments.index')">
+                                    Payments
+                                </NavLink>
 
 <!--                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">-->
 <!--                                    Expenses-->

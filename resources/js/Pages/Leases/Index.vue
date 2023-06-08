@@ -1,13 +1,13 @@
 <template>
-    <AppLayout title="Payments">
+    <AppLayout title="Leases">
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between pt-10">
 
-            <h2 class="text-2xl leading-7 font-bold text-purple-900">Payments</h2>
+            <h2 class="text-2xl leading-7 font-bold text-purple-900">Leases</h2>
 
             <div>
-                <PrimaryButton type="button" @click.prevent="router.get(route('payments.create'))" v-if="$page.props.can.create">
-                    Create New Payment
+                <PrimaryButton type="button" @click.prevent="router.get(route('leases.create'))" v-if="$page.props.can.create">
+                    Create New Lease
                     <PlusIcon aria-hidden="true" class="ml-2 h-4 w-4"/>
                 </PrimaryButton>
             </div>
@@ -22,8 +22,8 @@
                 </div>
 
                 <div class="flex space-x-2">
-                    <table-export v-if="payments.data.length" :payload="selected" route-name="payments"/>
-                    <payment-filters :filters="filters" @update-filters="applyFilters"/>
+                    <table-export v-if="leases.data.length" :payload="selected" route-name="leases"/>
+                    <lease-filters :filters="filters" @update-filters="applyFilters"/>
                 </div>
             </div>
         </div>
@@ -37,40 +37,41 @@
                     </table-th>
                     <table-th>Code</table-th>
                     <table-th>Tenant</table-th>
-                    <table-th>Account</table-th>
-                    <table-th>Amount</table-th>
-                    <table-th>Status</table-th>
-                    <table-th>Date</table-th>
+                    <table-th>House</table-th>
+                    <table-th>Property</table-th>
+                    <table-th>Start date</table-th>
+                    <table-th>End date</table-th>
+                    <table-th>State</table-th>
                     <table-th>Actions</table-th>
                 </slot>
 
-                <tr v-if="payments.data.length" v-for="payment in payments.data" :key="payment.id">
+                <tr v-if="leases.data.length" v-for="lease in leases.data" :key="lease.id">
                     <table-td>
-                        <Checkbox :id="payment.id" v-model:checked="selected" :value="payment.id"/>
+                        <Checkbox :id="lease.id" v-model:checked="selected" :value="lease.id"/>
                     </table-td>
-                    <table-td>{{ payment.code }}</table-td>
-                    <table-td class="capitalize">{{ payment.tenant.name }}</table-td>
-                    <table-td class="capitalize">{{ payment.account.name }}</table-td>
-                    <table-td class="capitalize">{{ payment.amount.toLocaleString() }}</table-td>
-                    <table-td class="capitalize">{{ payment.status }}</table-td>
-                    <table-td class="capitalize">{{ moment(payment.created_at).format('DD MMM Y HH:mm:ss') }}</table-td>
+                    <table-td>{{ lease.code }}</table-td>
+                    <table-td class="capitalize">{{ lease.tenant.name }}</table-td>
+                    <table-td class="capitalize">{{ lease.house.name }}</table-td>
+                    <table-td class="capitalize">{{ lease.house.property.name }}</table-td>
+                    <table-td class="capitalize">{{ moment(lease.start_date).format('DD MMM Y') }}</table-td>
+                    <table-td class="capitalize">{{ lease.end_date ? moment(lease.end_date).format('DD MMM Y'): '' }}</table-td>
+                    <table-td class="capitalize">{{ lease.state }}</table-td>
 
                     <table-td>
-                        <button v-if="payment.can.view" type="button" @click.prevent="router.get(route('payments.show', payment.id))">
+                        <button v-if="lease.can.view" type="button" @click.prevent="router.get(route('leases.show', lease.id))">
                             <EyeIcon aria-hidden="true" class="w-4 h-4 text-blue-800 ml-1"/>
                         </button>
-                        <button v-if="payment.can.edit" type="button" @click.prevent="router.get(route('payments.edit', payment.id))">
+                        <button v-if="lease.can.edit" type="button" @click.prevent="router.get(route('leases.edit', lease.id))">
                             <PencilSquareIcon aria-hidden="true" class="w-4 h-4 text-purple-900 ml-1"/>
                         </button>
                     </table-td>
                 </tr>
-                <table-no-data-tr v-else colspan="8" />
+                <table-no-data-tr v-else colspan="9" />
             </data-table>
 
             <div class="mt-4">
-                <pagination :meta="payments.meta"/>
+                <pagination :meta="leases.meta"/>
             </div>
-
         </div>
 
     </AppLayout>
@@ -84,19 +85,18 @@ import {router, useForm} from "@inertiajs/vue3";
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Checkbox from '@/Components/Checkbox.vue'
 import TableTh from "@/Components/Table/TableTh.vue"
-import TableTd from "@/Components/Table/TableTd.vue"
 import TextInput from "@/Components/TextInput.vue";
+import TableTd from "@/Components/Table/TableTd.vue"
 import Pagination from "@/Components/Pagination.vue"
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import DataTable from "@/Components/Table/DataTable.vue"
+import LeaseFilters from "./Components/LeaseFilters.vue";
 import TableExport from "@/Components/Table/TableExport.vue";
-import PaymentFilters from "./Components/PaymentFilters.vue";
 import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
-import {EyeIcon, PencilSquareIcon, PlusIcon,} from '@heroicons/vue/24/outline'
-
+import {EyeIcon, PencilSquareIcon, PlusIcon} from '@heroicons/vue/24/outline'
 
 const props = defineProps({
-    payments: Object,
+    leases: Object,
     filters: Object,
 })
 
@@ -109,17 +109,17 @@ let form = useForm({
 })
 
 watch((selectAll), () => {
-    selectAll.value ? selected.value = props.payments.data.map(payment => payment.id) : selected.value = []
+    selectAll.value ? selected.value = props.leases.data.map(lease => lease.id) : selected.value = []
 })
 
-watch(form, () => fetchPayments(), {deep: true})
+watch(form, () => fetchLeases(), {deep: true})
 
 const applyFilters = (payload) => {
     selectedFilters.value = payload
-    fetchPayments()
+    fetchLeases()
 }
 
-const fetchPayments = debounce(() => {
-    router.get(route('payments.index'), {...form.data(), ...selectedFilters.value}, {preserveState: true, only: ['payments']})
-}, 500)
+const fetchLeases = debounce(() => {
+    router.get(route('leases.index'), {...form.data(), ...selectedFilters.value}, {preserveState: true, only: ['leases']})
+}, 200)
 </script>

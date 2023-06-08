@@ -19,16 +19,12 @@ trait HasSerialCode
     {
 
         $code = match (get_class($model)) {
+            "App\Models\Lease" => 'LES',
             "App\Models\Expenses\Expense" => 'EXP',
-            "App\Models\Sales\SaleOrder" => 'SALE',
-            "App\Models\Products\Purchase" => 'PRCS',
-            "App\Models\Payments\Payment" => 'T-PAY',
-            "App\Models\CreditNotes\CreditNote" => 'CRDN',
-            "App\Models\Products\StockMovement" => 'STKM',
-            "App\Models\BankAccounts\Transaction" => 'TRNS',
+            "App\Models\Payments\Payment" => 'PAY',
+            "App\Models\Accounts\Transaction" => 'TRN',
             "App\Models\Accounts\AccountStatement" => 'STM',
-            "App\Models\Products\ProductAdjustment" => 'PADJ',
-            "App\Models\BankAccounts\BankAccountAdjustment" => 'BADJ',
+            "App\Models\Accounts\BankAccountAdjustment" => 'B-ADJ',
         };
 
         return $code . '-' . now()->format('Y') . '-' . now()->format('m');

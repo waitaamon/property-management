@@ -15,48 +15,36 @@
                     <h4 class="font-bold text-red-400">Balance: {{ accountBalance }}</h4>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 gap-y-6">
+                <div class="space-y-8">
+
                     <div class="">
-                        <InputLabel for="account_type" value="Account type"/>
+                        <InputLabel for="tenant" value="Tenant"/>
 
                         <v-select
-                            id="account_type"
-                            v-model="form.account_type"
-                            :options="$page.props.account_types"
+                            id="tenant"
+                            v-model="form.tenant"
+                            :options=" $page.props.tenants.data"
+                            :reduce="tenant => tenant.id"
                             class="mt-1 block w-full"
+                            label="name"
                         />
 
-                        <InputErrorMessage name="account_type"/>
+                        <InputErrorMessage name="tenant"/>
                     </div>
 
                     <div class="">
-                        <InputLabel for="account" value="Account"/>
+                        <InputLabel for="account" value="Bank account"/>
 
                         <v-select
                             id="account"
                             v-model="form.account"
-                            :options="form.account_type === 'customer' ? $page.props.customers.data : $page.props.suppliers.data"
+                            :options=" $page.props.accounts.data"
                             :reduce="account => account.id"
                             class="mt-1 block w-full"
                             label="name"
                         />
 
                         <InputErrorMessage name="account"/>
-                    </div>
-
-                    <div class="">
-                        <InputLabel for="bank_account" value="Bank account"/>
-
-                        <v-select
-                            id="bank_account"
-                            v-model="form.bank_account"
-                            :options=" $page.props.bank_accounts.data"
-                            :reduce="account => account.id"
-                            class="mt-1 block w-full"
-                            label="name"
-                        />
-
-                        <InputErrorMessage name="bank_account"/>
                     </div>
 
                     <div>
@@ -99,21 +87,15 @@ watch(() => props.payment, val => {
     form = useForm({
         note: val ? val.data.note : '',
         amount: val ? val.data.amount : 0,
-        account: val ? val.data.paymentable.id : '',
-        bank_account: val ? val.data.bank_account.id : '',
-        account_type: val ? val.data.account_type : 'customer',
+        account: val ? val.data.account.id : '',
+        tenant: val ? val.data.tenant.id : '',
     })
 }, {immediate: true})
 
 const accountBalance = computed(() => {
-    if (!form.account) return 0;
-
-    const account = form.account_type === 'customer'
-        ? usePage().props.customers.data.find(customer => customer.id === form.account)
-        : usePage().props.suppliers.data.find(supplier => supplier.id === form.account)
-
-    return account.balance.toLocaleString()
-
+    if (!form.tenant) return 0;
+    const tenant = usePage().props.tenants.data.find(tenant => tenant.id === form.tenant)
+    return tenant.balance.toLocaleString()
 })
 
 const submit = () => {
