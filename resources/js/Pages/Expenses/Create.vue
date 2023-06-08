@@ -11,7 +11,7 @@
 
             <form class="space-y-4" @submit.prevent="submit">
 
-                <div class="grid grid-cols-3 gap-3">
+                <div class="space-y-8">
 
                     <div class="col-span-1">
 
@@ -31,55 +31,23 @@
 
                     <div class="col-span-1">
 
-                        <InputLabel for="supplier" value="Supplier"/>
+                        <InputLabel for="account" value="Bank account"/>
 
                         <v-select
-                            id="supplier"
-                            v-model="form.supplier"
-                            :options="$page.props.suppliers.data"
-                            :reduce="supplier => supplier.id"
+                            id="account"
+                            v-model="form.account"
+                            :options="$page.props.accounts.data"
+                            :reduce="account => account.id"
                             class="mt-1 block w-full"
                             label="name"
                         />
 
-                        <InputErrorMessage name="supplier"/>
+                        <InputErrorMessage name="account"/>
                     </div>
 
                     <div class="col-span-1">
                         <text-input-group v-model="form.amount" label="Amount" name="amount" type="number"/>
                     </div>
-                </div>
-
-                <div class="mt-4 grid grid-cols-7 gap-4 items-center bg-indigo-50 px-4 py-3 rounded">
-                    <div class="col-span-1">
-                        <div class="flex items-center">
-                            <Checkbox id="has_payment" v-model:checked="form.has_payment"/>
-                            <div class="ml-2">
-                                <InputLabel for="has_payment" value="Pay now"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <template v-if="form.has_payment">
-                        <div class="col-span-3">
-
-                            <InputLabel for="account" value="Account"/>
-
-                            <v-select
-                                id="account"
-                                v-model="form.account"
-                                :options="$page.props.bank_accounts.data"
-                                :reduce="account => account.id"
-                                class="mt-1 block w-full"
-                                label="name"
-                            />
-                            <InputErrorMessage name="account"/>
-                        </div>
-                        <div class="col-span-3">
-                            <text-input-group v-model="form.amount" label="Amount paid" name="payment" type="number" disabled/>
-                        </div>
-                    </template>
-
                 </div>
 
                 <text-area-input v-model="form.note" label="Note" name="note"/>

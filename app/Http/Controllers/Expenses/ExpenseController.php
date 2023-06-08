@@ -5,19 +5,15 @@ namespace App\Http\Controllers\Expenses;
 use Inertia\Inertia;
 use App\Enums\ApprovalStatus;
 use App\Models\Expenses\Expense;
-use App\Models\Suppliers\Vendor;
 use App\Http\Controllers\Controller;
-use App\Actions\Payments\CreatePayment;
+use App\Models\Accounts\BankAccount;
 use App\Jobs\UpdateModelApprovalAction;
-use App\Actions\Payments\UpdatePayment;
-use App\Models\BankAccounts\BankAccount;
 use App\Models\Expenses\ExpenseCategory;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\Expenses\ExpenseResource;
-use App\Http\Resources\Suppliers\SupplierResource;
 use App\Http\Requests\Expenses\StoreExpenseRequest;
 use App\Http\Requests\Expenses\UpdateExpenseRequest;
-use App\Http\Resources\BankAccounts\BankAccountResource;
+use App\Http\Resources\Accounts\BankAccountResource;
 use App\Http\Resources\Expenses\ExpenseCategoryResource;
 
 class ExpenseController extends Controller
@@ -27,13 +23,13 @@ class ExpenseController extends Controller
         $this->authorize('viewAny', Expense::class);
 
         $expenses = Expense::query()
-            ->with('supplier', 'category')
+            ->with('bankAccount', 'category')
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
-            ->when(request()->filled('supplier'), fn(Builder $query) => $query->where('supplier_id', request('supplier')))
+            ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
             ->when(request()->filled('category'), fn(Builder $query) => $query->where('expense_category_id', request('category')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('created_at', '<=', request()->date('to')))
             ->when(request()->filled('from'), fn(Builder $query) => $query->whereDate('created_at', '>=', request()->date('from')))
-            ->when(request()->filled('search'), fn($query) => $query->search(['code', 'supplier.name'], request('search')))
+            ->when(request()->filled('search'), fn($query) => $query->search(['code', 'bankAccount.name'], request('search')))
             ->latest()
             ->paginate(request('perPage', 10))
             ->withQueryString();
@@ -42,7 +38,7 @@ class ExpenseController extends Controller
             'filters' => request()->all(),
             'statuses' => ApprovalStatus::cases(),
             'expenses' => ExpenseResource::collection($expenses),
-            'suppliers' => SupplierResource::collection(Vendor::select('id', 'name')->get()),
+            'accounts' => BankAccountResource::collection(BankAccount::select('id', 'name')->get()),
             'categories' => ExpenseCategoryResource::collection(ExpenseCategory::select('id', 'name')->get()),
             'can' => [
                 'create' => auth()->user()->can('create', Expense::class)
@@ -66,7 +62,7 @@ class ExpenseController extends Controller
         $expense = Expense::create([
             ...$request->only('note', 'amount'),
             'user_id' => auth()->id(),
-            'supplier_id' => request('supplier'),
+            'bank_account_id' => request('account'),
             'expense_category_id' => request('category'),
         ]);
 
@@ -74,10 +70,6 @@ class ExpenseController extends Controller
 
             UpdateModelApprovalAction::dispatch($expense, $expense->user, ApprovalStatus::APPROVED, 'approved on create');
 
-        }
-
-        if ($request->boolean('has_payment')) {
-            CreatePayment::handle(payload: $request->only('amount', 'note', 'account'), account: $this->getPaymentSupplier(), payable: $expense);
         }
 
         $this->toast('Successfully created expense.');
@@ -89,7 +81,7 @@ class ExpenseController extends Controller
     {
         $this->authorize('view', $expense);
 
-        $expense->load(['user', 'supplier', 'category', 'payment', 'approvals' => ['user']]);
+        $expense->load(['user', 'bankAccount', 'category', 'approvals' => ['user']]);
 
         return Inertia::render('Expenses/Show', [
             'expense' => new ExpenseResource($expense)
@@ -100,7 +92,7 @@ class ExpenseController extends Controller
     {
         $this->authorize('update', $expense);
 
-        $expense->load(['supplier', 'category', 'payment' => ['bankAccount']]);
+        $expense->load(['bankAccount', 'category']);
 
         return Inertia::render('Expenses/Create', [
             ...$this->createEditData(),
@@ -114,17 +106,9 @@ class ExpenseController extends Controller
 
         $expense->update([
             ...$request->only('note', 'amount'),
-            'supplier_id' => request('supplier'),
+            'bank_account_id' => request('account'),
             'expense_category_id' => request('category'),
         ]);
-
-        if ($request->boolean('has_payment') && $expense->payment()->doesntExist()) {
-            CreatePayment::handle(payload: $request->only('amount', 'note', 'account'), account: $this->getPaymentSupplier(), payable: $expense);
-        }
-
-        if ($request->boolean('has_payment') && $expense->payment()->exists()) {
-            UpdatePayment::handle($expense->payment, $request->only('note', 'amount', 'account'));
-        }
 
         $this->toast('Successfully updated expense.');
 
@@ -135,29 +119,22 @@ class ExpenseController extends Controller
     {
         $this->authorize('delete', $expense);
 
-        $expense->payment()->delete();
-
         $expense->statements()->delete();
+
+        $expense->transactions()->delete();
 
         $this->toast('Successfully deleted expense.');
 
         return redirect()->route('expenses.index');
     }
 
-    protected function getPaymentSupplier(): Vendor|null
-    {
-        return request()->filled('supplier') ? Vendor::find(request('supplier')) : null;
-    }
-
     protected function createEditData(): array
     {
         $accounts = BankAccount::select('id', 'name')->get();
-        $suppliers = Vendor::select('id', 'name')->get();
         $categories = ExpenseCategory::select('id', 'name')->get();
 
         return [
-            'suppliers' => SupplierResource::collection($suppliers),
-            'bank_accounts' => BankAccountResource::collection($accounts),
+            'accounts' => BankAccountResource::collection($accounts),
             'categories' => ExpenseCategoryResource::collection($categories),
         ];
     }

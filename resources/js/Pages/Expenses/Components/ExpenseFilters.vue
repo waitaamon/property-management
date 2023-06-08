@@ -2,11 +2,11 @@
     <table-filters>
         <form class="px-5 py-4 space-y-3" @submit.prevent="submit">
             <div>
-                <InputLabel for="supplier" value="Filter by supplier"/>
+                <InputLabel for="account" value="Filter by account"/>
                 <v-select
-                    v-model="form.supplier"
-                    :options="$page.props.suppliers.data"
-                    :reduce="supplier => supplier.id"
+                    v-model="form.account"
+                    :options="$page.props.accounts.data"
+                    :reduce="account => account.id"
                     class="mt-1 block w-full h-full"
                     label="name"
                 />

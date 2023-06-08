@@ -37,7 +37,7 @@
                     </table-th>
                     <table-th>Code</table-th>
                     <table-th>Category</table-th>
-                    <table-th>Supplier</table-th>
+                    <table-th>Account</table-th>
                     <table-th>Amount</table-th>
                     <table-th>Status</table-th>
                     <table-th>Date</table-th>
@@ -50,7 +50,7 @@
                     </table-td>
                     <table-td>{{ expense.code }}</table-td>
                     <table-td class="capitalize">{{ expense.category.name }}</table-td>
-                    <table-td class="capitalize">{{ expense.supplier ? expense.supplier.name : '' }}</table-td>
+                    <table-td class="capitalize">{{ expense.account.name }}</table-td>
                     <table-td class="capitalize">{{ expense.amount.toLocaleString() }}</table-td>
                     <table-td class="capitalize">{{ expense.status }}</table-td>
                     <table-td class="capitalize">{{ moment(expense.created_at).format('DD MMM Y HH:mm:ss') }}</table-td>

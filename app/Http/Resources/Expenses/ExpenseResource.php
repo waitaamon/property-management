@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ApprovalResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Payments\PaymentResource;
-use App\Http\Resources\Suppliers\SupplierResource;
+use App\Http\Resources\Accounts\BankAccountResource;
+use App\Http\Resources\Accounts\TransactionResource;
 use App\Http\Resources\Accounts\AccountStatementResource;
 
 class ExpenseResource extends JsonResource
@@ -24,10 +24,10 @@ class ExpenseResource extends JsonResource
             'updated_at' => $this->whenHas('updated_at'),
 
             'user' => new UserResource($this->whenLoaded('user')),
-            'payment' => new PaymentResource($this->whenLoaded('payment')),
-            'supplier' => new SupplierResource($this->whenLoaded('supplier')),
+            'account' => new BankAccountResource($this->whenLoaded('bankAccount')),
             'category' => new ExpenseCategoryResource($this->whenLoaded('category')),
             'approvals' => ApprovalResource::collection($this->whenLoaded('approvals')),
+            'transactions' => TransactionResource::collection($this->whenLoaded('transactions')),
             'statements' => AccountStatementResource::collection($this->whenLoaded('statements')),
 
             'can' => [

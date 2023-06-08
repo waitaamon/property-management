@@ -31,9 +31,9 @@
                                     Payments
                                 </NavLink>
 
-<!--                                <NavLink :href="route('expenses.index')" :active="route().current('expenses.index')">-->
-<!--                                    Expenses-->
-<!--                                </NavLink>-->
+                                <NavLink :active="route().current('expenses.index')" :href="route('expenses.index')">
+                                    Expenses
+                                </NavLink>
 
 <!--                                <NavLink :href="route('bank-account-adjustments.index')" :active="route().current('bank-account-adjustments.index')">-->
 <!--                                    Account adjustments-->

@@ -2,8 +2,8 @@
 
 namespace App\Models\Expenses;
 
-use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

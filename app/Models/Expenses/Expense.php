@@ -2,12 +2,13 @@
 
 namespace App\Models\Expenses;
 
-use App\Models\Accounts\BankAccount;
-use App\Models\Accounts\Transaction;
+use App\Models\Accounts\AccountStatement;
 use App\Models\User;
 use App\Traits\HasApproval;
 use App\Traits\HasSerialCode;
 use App\Enums\ApprovalStatus;
+use App\Models\Accounts\BankAccount;
+use App\Models\Accounts\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,6 +38,11 @@ class Expense extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function statements(): MorphMany
+    {
+        return $this->morphMany(AccountStatement::class, 'statementable');
     }
 
     public function transactions(): MorphMany
