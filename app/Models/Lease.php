@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\LeaseState;
+use App\Models\Invoices\Invoice;
 use App\Models\Tenants\Tenant;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
@@ -10,7 +11,7 @@ use App\Traits\HasSerialCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 class Lease extends Model
 {
@@ -38,5 +39,10 @@ class Lease extends Model
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 }

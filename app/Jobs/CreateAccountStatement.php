@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use App\Models\Expenses\Expense;
+use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,8 @@ class CreateAccountStatement implements ShouldQueue
     {
         return match (true) {
              $this->model instanceof Payment => $this->model->tenant,
-             $this->model instanceof Expense => $this->model->category,
+            $this->model instanceof Expense => $this->model->category,
+            $this->model instanceof Invoice => $this->model->lease->tenant,
         };
     }
 }

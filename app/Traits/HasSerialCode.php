@@ -22,6 +22,7 @@ trait HasSerialCode
             "App\Models\Lease" => 'LES',
             "App\Models\Expenses\Expense" => 'EXP',
             "App\Models\Payments\Payment" => 'PAY',
+            "App\Models\Invoices\Invoice" => 'INV',
             "App\Models\Accounts\Transaction" => 'TRN',
             "App\Models\Accounts\AccountStatement" => 'STM',
             "App\Models\Accounts\BankAccountAdjustment" => 'B-ADJ',

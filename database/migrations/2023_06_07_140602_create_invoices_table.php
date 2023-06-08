@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained();
+            $table->foreignId('lease_id')->constrained();
+            $table->date('from');
+            $table->date('to');
+            $table->text('note')->nullable();
+            $table->string('status')->default('pending approval');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

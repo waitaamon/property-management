@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Invoices\Invoice;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use App\Enums\ApprovalStatus;
@@ -43,6 +44,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ($this->status == ApprovalStatus::APPROVED) {
             match (true) {
                 $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount),
+                $this->model instanceof Invoice => CreateAccountStatement::dispatch($this->model, $this->model->amount),
                 $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
                 default => null
             };
@@ -51,7 +53,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ( $this->status == ApprovalStatus::REVERSED) {
             match (true) {
                 $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount),
-                $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
+                $this->model instanceof Invoice, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
             };
         }
     }
