@@ -7,11 +7,11 @@ Route::get('/', fn() => redirect()->route('login'));
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
 
+    Route::get('/print-document', \App\Http\Controllers\PrintController::class)->name('print-document');
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
-
 
     Route::resources([
         'roles' => \App\Http\Controllers\RoleController::class,

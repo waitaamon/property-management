@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             BankAccountSeeder::class,
             ExpenseCategorySeeder::class,
             PermissionSeeder::class,
+            SettingSeeder::class,
             TaxSeeder::class,
             UserSeeder::class,
         ]);
