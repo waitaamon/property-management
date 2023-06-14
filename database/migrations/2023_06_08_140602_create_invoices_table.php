@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('lease_id')->constrained();
+            $table->foreignId('tax_id')->constrained();
             $table->date('from');
             $table->date('to');
             $table->bigInteger('amount');

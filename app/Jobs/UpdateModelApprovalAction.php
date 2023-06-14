@@ -2,10 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Models\Invoices\Invoice;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use App\Enums\ApprovalStatus;
+use App\Models\Invoices\Invoice;
 use App\Models\Expenses\Expense;
 use App\Models\Payments\Payment;
 use Illuminate\Queue\SerializesModels;
@@ -28,7 +28,7 @@ class UpdateModelApprovalAction implements ShouldQueue
         $this->model->approvals()->create([
             'note' => $this->note,
             'user_id' => $this->user->id,
-            'status' =>  $this->status->value
+            'status' => $this->status->value
         ]);
 
         $this->createAccountStatement();
@@ -44,16 +44,17 @@ class UpdateModelApprovalAction implements ShouldQueue
         if ($this->status == ApprovalStatus::APPROVED) {
             match (true) {
                 $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount),
-                $this->model instanceof Invoice => CreateAccountStatement::dispatch($this->model, $this->model->amount),
+                $this->model instanceof Invoice => CreateAccountStatement::dispatch($this->model, $this->model->total_amount),
                 $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
                 default => null
             };
         }
 
-        if ( $this->status == ApprovalStatus::REVERSED) {
+        if ($this->status == ApprovalStatus::REVERSED) {
             match (true) {
                 $this->model instanceof Payment => CreateAccountStatement::dispatch($this->model, $this->model->amount),
-                $this->model instanceof Invoice, $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
+                $this->model instanceof Expense => CreateAccountStatement::dispatch($this->model, $this->model->amount, false),
+                $this->model instanceof Invoice => CreateAccountStatement::dispatch($this->model, $this->model->total_amount, false),
             };
         }
     }

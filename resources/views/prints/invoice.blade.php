@@ -41,18 +41,18 @@
                 </tr>
             @if($payload->tax)
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="2"></td>
                     <td style="text-align: right">Sub total</td>
                     <td style="text-align: right">{{ number_format($payload->amount, 2) }}</td>
                 </tr>
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="2"></td>
                     <td style="text-align: right">VAT 16%</td>
-                    <td style="text-align: right">{{ number_format(($payload->total_tax), 2) }}</td>
+                    <td style="text-align: right">{{ number_format(($payload->tax_amount), 2) }}</td>
                 </tr>
             @endif
             <tr style="margin-top: 2rem; background: #e3e3e3;">
-                <td colspan="3"></td>
+                <td colspan="2"></td>
                 <td style="text-align: right"><strong>TOTAL AMOUNT</strong></td>
                 <td style="text-align: right"><strong>{{ number_format($payload->total_amount, 2) }}</strong></td>
             </tr>

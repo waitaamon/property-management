@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <h2 class="text-2xl leading-7 font-bold text-purple-900 mt-10">
-                {{invoice ? 'Update ' : 'Create new '}}Invoice
+                {{ invoice ? 'Update ' : 'Create new ' }}Invoice
             </h2>
 
         </div>
@@ -47,15 +47,15 @@
 
 
                     <div class="col-span-1">
-                        <text-input-group type="number" v-model="form.amount" label="Amount" name="amount"/>
+                        <text-input-group v-model="form.amount" label="Amount" name="amount" type="number"/>
                     </div>
 
                     <div class="col-span-1">
-                        <text-input-group type="date" v-model="form.from" label="From" name="from"/>
+                        <text-input-group v-model="form.from" label="From" name="from" type="date"/>
                     </div>
 
                     <div class="col-span-1">
-                        <text-input-group type="date" v-model="form.to" label="To" name="to"/>
+                        <text-input-group v-model="form.to" label="To" name="to" type="date"/>
                     </div>
 
                     <div class="col-span-2">
@@ -108,6 +108,13 @@ const leases = computed(() => {
     if (!form.tenant) return [];
     const tenant = usePage().props.tenants.data.find(tenant => tenant.id === form.tenant)
     return tenant.leases
+})
+
+watch(() => form.lease, val => {
+    if (!val) return;
+
+    const lease = leases.value.find(lease => lease.id === val)
+    form.amount = lease.house.rent
 })
 
 const submit = () => {
