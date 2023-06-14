@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Tenants;
 
+use App\Http\Resources\Houses\HouseResource;
+use App\Http\Resources\Leases\LeaseResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,6 +21,9 @@ class TenantResource extends JsonResource
             'address' => $this->whenHas('address'),
             'balance' => $this->whenAppended('balance'),
             'created_at' => $this->whenHas('created_at'),
+
+            'leases' => LeaseResource::collection($this->whenLoaded('leases')),
+            'houses' => HouseResource::collection($this->whenLoaded('houses')),
 
             'can' => [
                 'view' => auth()->user()->can('view', $this->resource),

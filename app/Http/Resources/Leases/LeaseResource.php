@@ -15,6 +15,7 @@ class LeaseResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'note' => $this->whenHas('note'),
             'code' => $this->whenHas('code'),
             'state' => $this->whenHas('state'),

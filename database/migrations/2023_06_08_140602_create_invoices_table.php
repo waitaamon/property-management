@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('lease_id')->constrained();
             $table->date('from');
             $table->date('to');
+            $table->bigInteger('amount');
             $table->text('note')->nullable();
             $table->string('status')->default('pending approval');
             $table->timestamps();

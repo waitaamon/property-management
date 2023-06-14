@@ -27,6 +27,10 @@
                                     Leases
                                 </NavLink>
 
+                                <NavLink :active="route().current('invoices.index')" :href="route('invoices.index')">
+                                    Invoices
+                                </NavLink>
+
                                 <NavLink :active="route().current('payments.index')" :href="route('payments.index')">
                                     Payments
                                 </NavLink>

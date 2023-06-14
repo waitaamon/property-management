@@ -14,7 +14,7 @@ class TaxSeeder extends Seeder
     public function run(): void
     {
         $taxes = [
-            ['name' => '16%', 'rate' => 0.16, 'is_default' => true],
+            ['name' => '16%', 'rate' => 1.16, 'is_default' => true],
         ];
 
         collect($taxes)->each(fn($tax) => Tax::create($tax));

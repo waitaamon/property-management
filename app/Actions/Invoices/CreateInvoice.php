@@ -2,6 +2,7 @@
 
 namespace App\Actions\Invoices;
 
+use App\Models\Tax;
 use Carbon\Carbon;
 use App\Enums\ApprovalStatus;
 use App\Models\Invoices\Invoice;
@@ -11,8 +12,13 @@ class CreateInvoice
 {
     public static function handle(array $payload): Invoice|null
     {
+        $tax = Tax::where('is_default', true)->first();
+
+        if (!$tax) return null;
+
         $invoice = Invoice::create([
             'user_id' => auth()->check() ? auth()->id() : '',
+            'tax_id' => $tax->id,
             'note' => $payload['note'],
             'amount' => $payload['amount'],
             'lease_id' => $payload['lease'],

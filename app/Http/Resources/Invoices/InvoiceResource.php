@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources\Invoices;
 
+use App\Http\Resources\Accounts\AccountStatementResource;
+use App\Http\Resources\ApprovalResource;
+use App\Http\Resources\Houses\HouseResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\Leases\LeaseResource;
@@ -24,6 +27,10 @@ class InvoiceResource extends JsonResource
 
             'user' => new UserResource($this->whenLoaded('user')),
             'lease' => new LeaseResource($this->whenLoaded('lease')),
+            'houses' => new HouseResource($this->whenLoaded('houses')),
+            'approvals' => ApprovalResource::collection($this->whenLoaded('approvals')),
+            'statements' => AccountStatementResource::collection($this->whenLoaded('statements')),
+
 
             'can' => [
                 'view' => auth()->user()->can('view', $this->resource),

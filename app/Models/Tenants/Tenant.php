@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenants;
 
+use App\Models\House;
 use Carbon\Carbon;
 use App\Models\Lease;
 use App\Models\Invoices\Invoice;
@@ -12,7 +13,7 @@ use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{HasMany,MorphMany};
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough, MorphMany};
 
 class Tenant extends Model
 {
@@ -68,6 +69,11 @@ class Tenant extends Model
     public function leases(): HasMany
     {
         return $this->hasMany(Lease::class);
+    }
+
+    public function houses(): HasManyThrough
+    {
+        return $this->hasManyThrough(House::class, Lease::class);
     }
 
     public function invoices(): HasMany

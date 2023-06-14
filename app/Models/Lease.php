@@ -8,6 +8,7 @@ use App\Models\Tenants\Tenant;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +26,11 @@ class Lease extends Model
         'state' => LeaseState::class,
         'status' => ApprovalStatus::class,
     ];
+
+    protected function name():Attribute
+    {
+        return Attribute::make(get: fn() => $this->house->property->name .' - '.$this->house->name);
+    }
 
     public function user(): BelongsTo
     {

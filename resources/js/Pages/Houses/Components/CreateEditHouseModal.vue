@@ -30,9 +30,9 @@
 
             <text-input-group v-model="form.name" label="Name" name="name"/>
 
-            <text-input-group v-model="form.rent" label="Rent" name="rent"/>
+            <text-input-group type="number" v-model="form.rent" label="Rent" name="rent"/>
 
-            <text-input-group v-model="form.deposit" label="Deposit" name="deposit"/>
+            <text-input-group type="number" v-model="form.deposit" label="Deposit" name="deposit"/>
 
             <text-input-group v-model="form.description" label="Description" name="description"/>
 
