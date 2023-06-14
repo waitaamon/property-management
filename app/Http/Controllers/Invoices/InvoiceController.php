@@ -72,7 +72,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('view', $invoice);
 
-        $invoice->load(['user', 'lease' => ['tenant', 'house' => ['property']], 'approvals' => ['user']]);
+        $invoice->load(['user', 'tax', 'lease' => ['tenant', 'house' => ['property']], 'approvals' => ['user']]);
 
         return Inertia::render('Invoices/Show', [
             'invoice' => new InvoiceResource($invoice)

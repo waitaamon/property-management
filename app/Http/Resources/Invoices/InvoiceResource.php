@@ -5,6 +5,7 @@ namespace App\Http\Resources\Invoices;
 use App\Http\Resources\Accounts\AccountStatementResource;
 use App\Http\Resources\ApprovalResource;
 use App\Http\Resources\Houses\HouseResource;
+use App\Http\Resources\TaxResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\Leases\LeaseResource;
@@ -16,6 +17,8 @@ class InvoiceResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'tax_amount' => $this->tax_amount,
+            'total_amount' => $this->total_amount,
             'to' => $this->whenHas('to'),
             'code' => $this->whenHas('code'),
             'from' => $this->whenHas('from'),
@@ -25,6 +28,7 @@ class InvoiceResource extends JsonResource
             'created_at' => $this->whenHas('created_at'),
             'updated_at' => $this->whenHas('updated_at'),
 
+            'tax' => new TaxResource($this->whenLoaded('tax')),
             'user' => new UserResource($this->whenLoaded('user')),
             'lease' => new LeaseResource($this->whenLoaded('lease')),
             'houses' => new HouseResource($this->whenLoaded('houses')),

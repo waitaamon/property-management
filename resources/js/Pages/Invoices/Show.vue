@@ -49,13 +49,31 @@
                     </slot>
 
                     <template v-if="invoice.data">
-                        <tr>
+                        <tr style="margin-top: 5px;">
                             <table-td>
                                 1.
                             </table-td>
                             <table-td>{{ invoice.data.lease.house.property.name }}</table-td>
                             <table-td>{{ invoice.data.lease.house.name }}</table-td>
                             <table-td>{{ invoice.data.amount.toLocaleString() }}</table-td>
+                        </tr>
+
+                        <tr style="margin-top: 5px;">
+                            <table-td colspan="2" />
+                            <table-td class="font-semibold">Amount</table-td>
+                            <table-td class="font-semibold">{{ invoice.data.amount.toLocaleString() }}</table-td>
+                        </tr>
+
+                        <tr style="margin-top: 5px;">
+                            <table-td colspan="2" />
+                            <table-td class="font-semibold">{{ invoice.data.tax.name }}</table-td>
+                            <table-td class="font-semibold">{{ invoice.data.tax_amount.toLocaleString() }}</table-td>
+                        </tr>
+
+                        <tr style="margin-top: 5px;">
+                            <table-td colspan="2" />
+                            <table-td class="font-semibold">Total</table-td>
+                            <table-td class="font-semibold">{{ invoice.data.total_amount.toLocaleString() }}</table-td>
                         </tr>
 
                     </template>
