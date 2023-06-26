@@ -26,12 +26,12 @@
         <div class="row">
             <div class="col-12">
                 <h5 class="h5 font-weight-bold text-uppercase">RECEIPT NO: &nbsp; <span class="">{{ $payload->code }}</span></h5>
-                <h5 class="h5 font-weight-bold text-uppercase">NAME: &nbsp; <span class="">{{ $payload->accountable->name }}</span></h5>
+                <h5 class="h5 font-weight-bold text-uppercase">NAME: &nbsp; <span class="">{{ $payload->tenant->name }}</span></h5>
 
                 <h4 class="h4 font-weight-bolder text-uppercase my-2 text-under"><u>Payments Details</u></h4>
 
                 <h5 class="h5 font-weight-bold text-uppercase">Date: &nbsp; <span class="">{{ $payload->created_at->format('Y-m-d') }}</span></h5>
-                <h5 class="h5 font-weight-bold text-uppercase">Type: &nbsp; <span class="">{{ $payload->bankAccount->name }}</span></h5>
+                <h5 class="h5 font-weight-bold text-uppercase">Account: &nbsp; <span class="">{{ $payload->bankAccount->name }}</span></h5>
                 <h5 class="h5 font-weight-bold text-uppercase">Amount: &nbsp; <span class="">{{ number_format($payload->amount, 2) }}</span></h5>
             </div>
         </div>

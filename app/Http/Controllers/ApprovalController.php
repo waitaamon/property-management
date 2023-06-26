@@ -39,7 +39,7 @@ class ApprovalController extends Controller
             'lease' => Lease::findOrFail(request('id')),
             'Payment' => Payment::findOrFail(request('id')),
             'invoice' => Invoice::findOrFail(request('id')),
-            'Expense' => Expense::with('items')->findOrFail(request('id')),
+            'Expense' => Expense::findOrFail(request('id')),
             'BankAccountAdjustment' => BankAccountAdjustment::with('items.account')->findOrFail(request('id')),
             'default' => throw new ModelNotFoundException()
         };
