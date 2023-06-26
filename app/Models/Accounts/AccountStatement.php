@@ -2,6 +2,9 @@
 
 namespace App\Models\Accounts;
 
+use App\Models\Expenses\Expense;
+use App\Models\Invoices\Invoice;
+use App\Models\Payments\Payment;
 use App\Traits\HasSerialCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

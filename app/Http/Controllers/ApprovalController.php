@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Lease;
 use App\Enums\ApprovalStatus;
-use App\Models\Sales\SaleOrder;
+use App\Models\Invoices\Invoice;
 use App\Models\Expenses\Expense;
 use App\Models\Payments\Payment;
-use App\Jobs\CreateStockMovement;
-use App\Models\Products\Purchase;
-use App\Models\CreditNotes\CreditNote;
+use App\Jobs\CreateAccountStatement;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\UpdateModelApprovalAction;
-use App\Models\Products\ProductAdjustment;
+use App\Jobs\CreateBankAccountTransaction;
 use App\Http\Requests\ApprovalActionRequest;
-use App\Models\BankAccounts\BankAccountAdjustment;
+use App\Models\Accounts\BankAccountAdjustment;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApprovalController extends Controller
@@ -37,11 +36,10 @@ class ApprovalController extends Controller
     protected function getApprovalModel(): Model|Exception
     {
         return match (request('model')) {
+            'lease' => Lease::findOrFail(request('id')),
             'Payment' => Payment::findOrFail(request('id')),
+            'invoice' => Invoice::findOrFail(request('id')),
             'Expense' => Expense::with('items')->findOrFail(request('id')),
-            'SaleOrder' => SaleOrder::with('items.product')->findOrFail(request('id')),
-            'Purchase' => Purchase::with('items.product')->findOrFail(request('id')),
-            'ProductAdjustment' => ProductAdjustment::with('items.product')->findOrFail(request('id')),
             'BankAccountAdjustment' => BankAccountAdjustment::with('items.account')->findOrFail(request('id')),
             'default' => throw new ModelNotFoundException()
         };
@@ -62,12 +60,45 @@ class ApprovalController extends Controller
             return;
         }
 
-        if ($model instanceof ProductAdjustment || $model instanceof SaleOrder || $model instanceof Purchase || $model instanceof CreditNote) {
-            $model->items->each(fn($item) => CreateStockMovement::dispatch($item, $this->getApprovalStatus() == ApprovalStatus::APPROVED ? $item->action : !$item->action));
+        if ($this->getApprovalStatus() == ApprovalStatus::APPROVED) {
+
+            if ($model instanceof BankAccountAdjustment) {
+                $model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, $model->action));
+            }
+
+            if ($model instanceof Invoice) {
+                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
+            }
+
+
+            if ($model instanceof Payment) {
+                CreateBankAccountTransaction::dispatch($model, $model->action);
+                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
+            }
+
+            if ($model instanceof Expense) {
+                CreateBankAccountTransaction::dispatch($model, !$model->action);
+                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
+            }
         }
 
-        if ($model instanceof BankAccountAdjustment || $model instanceof Payment || $model instanceof Expense) {
+        if ($this->getApprovalStatus() == ApprovalStatus::REVERSED) {
+            if ($model instanceof BankAccountAdjustment) {
+                $model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, !$model->action));
+            }
 
+            if ($model instanceof Invoice) {
+                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
+            }
+            if ($model instanceof Payment) {
+                CreateBankAccountTransaction::dispatch($model, !$model->action);
+                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
+            }
+
+            if ($model instanceof Expense) {
+                CreateBankAccountTransaction::dispatch($model, $model->action);
+                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
+            }
         }
     }
 }

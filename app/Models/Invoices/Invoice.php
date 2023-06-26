@@ -38,6 +38,11 @@ class Invoice extends Model
         return Attribute::make(get: fn() => $this->total_amount - $this->amount);
     }
 
+    public function action(): Attribute
+    {
+        return Attribute::make(get: fn() => true);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

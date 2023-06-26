@@ -13,6 +13,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    Route::post('approve', \App\Http\Controllers\ApprovalController::class)->name('approve');
+
     Route::resources([
         'roles' => \App\Http\Controllers\RoleController::class,
         'leases' => \App\Http\Controllers\LeaseController::class,

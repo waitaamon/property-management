@@ -31,7 +31,7 @@ class LeasePolicy
 
     public function delete(User $user, Lease $lease): bool
     {
-        return $user->can('delete lease') && in_array([ApprovalStatus::PENDING_APPROVAL, ApprovalStatus::VOIDED], $lease->status);
+        return $user->can('delete lease') && in_array($lease->status, [ApprovalStatus::PENDING_APPROVAL, ApprovalStatus::VOIDED]);
     }
 
     public function approve(User $user, Lease $lease): bool

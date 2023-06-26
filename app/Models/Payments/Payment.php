@@ -9,6 +9,7 @@ use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
 use App\Models\Accounts\BankAccount;
 use App\Models\Accounts\Transaction;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +26,11 @@ class Payment extends Model
         'amount' => 'float',
         'status' => ApprovalStatus::class,
     ];
+
+    public function action(): Attribute
+    {
+        return Attribute::make(get: fn() => true);
+    }
 
     public function user(): BelongsTo
     {

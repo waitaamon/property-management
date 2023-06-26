@@ -9,6 +9,7 @@ use App\Traits\HasSerialCode;
 use App\Enums\ApprovalStatus;
 use App\Models\Accounts\BankAccount;
 use App\Models\Accounts\Transaction;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +25,11 @@ class Expense extends Model
         'amount' => 'float',
         'status' => ApprovalStatus::class
     ];
+
+    public function action(): Attribute
+    {
+        return Attribute::make(get: fn() => false);
+    }
 
     public function category(): BelongsTo
     {
