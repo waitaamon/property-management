@@ -68,7 +68,7 @@ class LeaseController extends Controller
 
         $house = House::find($request->house);
 
-        if ($house->has_active_lease){
+        if ($house->has_active_lease) {
             $this->toast('This house has an active lease.');
             return;
         }
@@ -85,6 +85,21 @@ class LeaseController extends Controller
         $this->toast('Successfully saved lease.');
 
         return redirect()->route('leases.index');
+    }
+
+    public function edit(Lease $lease)
+    {
+        $this->authorize('update', $lease);
+
+        $lease->load('house', 'tenant');
+
+        $properties = Property::select('id', 'name')->with(['houses' => fn($query) => $query->select('property_id', 'id', 'name')->where('is_active', true)])->get();
+
+        return Inertia::render('Leases/Create', [
+            'lease' => LeaseController::collection($lease),
+            'properties' => PropertyResource::collection($properties),
+            'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
+        ]);
     }
 
     public function show(Lease $lease)
