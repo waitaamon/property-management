@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Enums\LeaseState;
-use App\Models\Invoices\Invoice;
-use App\Models\Tenants\Tenant;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Tenants\Tenant;
+use App\Models\Invoices\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
@@ -29,7 +29,7 @@ class Lease extends Model
 
     protected function name(): Attribute
     {
-        return Attribute::make(get: fn() => $this->house?->property?->name . ' - ' . $this->house->name);
+        return Attribute::make(get: fn() => $this->house?->property?->name . ' - ' . $this->house?->name);
     }
 
     public function user(): BelongsTo
