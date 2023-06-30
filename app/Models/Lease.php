@@ -27,9 +27,9 @@ class Lease extends Model
         'status' => ApprovalStatus::class,
     ];
 
-    protected function name():Attribute
+    protected function name(): Attribute
     {
-        return Attribute::make(get: fn() => $this->house->property->name .' - '.$this->house->name);
+        return Attribute::make(get: fn() => $this->house?->property?->name . ' - ' . $this->house->name);
     }
 
     public function user(): BelongsTo
