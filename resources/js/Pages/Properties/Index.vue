@@ -88,7 +88,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue'
 import DataTable from "@/Components/Table/DataTable.vue"
 import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
 import StatisticsCardComponent from "@/Components/StatisticsCardComponent.vue"
-import {EyeIcon, PencilSquareIcon, PlusIcon, CheckCircleIcon, XCircleIcon, ArrowPathIcon, TrashIcon} from '@heroicons/vue/24/outline'
+import {EyeIcon, PencilSquareIcon, PlusIcon, TrashIcon} from '@heroicons/vue/24/outline'
 import CreateEditPropertyModal from "@/Pages/Properties/Components/CreateEditPropertyModal.vue";
 
 const props = defineProps({

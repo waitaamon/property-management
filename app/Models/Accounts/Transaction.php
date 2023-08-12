@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounts;
 
+use App\Traits\HasLogs;
 use App\Traits\HasSerialCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphTo};
 
 class Transaction extends Model
 {
-    use HasFactory, SoftDeletes, HasSerialCode;
+    use HasFactory, SoftDeletes, HasSerialCode, HasLogs;
 
     protected $fillable = ['code', 'account_id', 'amount', 'balance', 'action', 'created_at'];
 

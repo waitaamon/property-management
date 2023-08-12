@@ -4,6 +4,7 @@ namespace App\Models\Accounts;
 
 use App\Models\User;
 use App\Enums\ApprovalStatus;
+use App\Traits\HasLogs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class BankAccountAdjustment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasLogs;
 
     protected $fillable = ['code', 'user_id', 'description', 'status'];
 

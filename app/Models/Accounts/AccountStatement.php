@@ -5,6 +5,7 @@ namespace App\Models\Accounts;
 use App\Models\Expenses\Expense;
 use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
+use App\Traits\HasLogs;
 use App\Traits\HasSerialCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AccountStatement extends Model
 {
-    use HasFactory, SoftDeletes, HasSerialCode;
+    use HasFactory, SoftDeletes, HasSerialCode, HasLogs;
 
     protected $fillable = ['code', 'amount', 'balance', 'action', 'accountable_id', 'accountable_type'];
 

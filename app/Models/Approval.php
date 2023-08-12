@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogs;
 use App\Enums\ApprovalStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphTo};
 
 class Approval extends Model
 {
-    use HasFactory;
+    use HasFactory, HasLogs;
 
     protected $fillable = ['user_id', 'note', 'status'];
 

@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use App\Actions\Fortify\CreateNewUser;
 use App\Http\Resources\UserResource;
+use App\Actions\Fortify\CreateNewUser;
 use App\Notifications\UserCreatedNotification;
 use App\Http\Resources\Permissions\RoleResource;
+use App\Http\Resources\Properties\PropertyResource;
 use App\Http\Requests\Users\{StoreUserRequest, UpdateUserRequest};
 
 class UsersController extends Controller
@@ -20,15 +22,16 @@ class UsersController extends Controller
 
         $users = User::query()
             ->withTrashed()
-            ->with(['roles'])
+            ->with(['roles', 'properties:id,name'])
             ->when($request->filled('search'), fn($query) => $query->search(['name', 'email'], $request->search))
             ->paginate(request('perPage', 10))
             ->withQueryString();
 
         return Inertia::render('Users/Index', [
             'users' => UserResource::collection($users),
-            'roles' => RoleResource::collection(Role::select('id', 'name')->get()),
             'filters' =>  $request->all('search','per_page'),
+            'roles' => RoleResource::collection(Role::select('id', 'name')->get()),
+            'properties' => PropertyResource::collection(Property::select('id', 'name')->get()),
             'statistics' => [
                 ['name' => 'Total Users', 'icon' => 'UserGroupIcon', 'value' => $users->total()],
             ],

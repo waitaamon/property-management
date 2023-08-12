@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogs;
 use App\Enums\LeaseState;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 class Lease extends Model
 {
-    use HasFactory, SoftDeletes, HasSerialCode, HasApproval;
+    use HasFactory, SoftDeletes, HasSerialCode, HasApproval, HasLogs;
 
     protected $fillable = ['code', 'user_id', 'house_id', 'tenant_id', 'start_date', 'end_date', 'notes', 'status', 'state'];
 

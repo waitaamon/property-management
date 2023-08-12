@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Properties\PropertyResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Permissions\RoleResource;
@@ -18,6 +19,7 @@ class UserResource extends JsonResource
             'created_at' => $this->whenHas('created_at'),
 
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'properties' => PropertyResource::collection($this->whenLoaded('properties')),
 
             'can' => [
                 'view' => auth()->user()->can('view', $this->resource),

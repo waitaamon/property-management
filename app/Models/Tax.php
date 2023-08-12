@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogs;
 use App\Models\Invoices\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tax extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasLogs;
 
     protected $fillable = ['name', 'rate', 'description', 'is_default'];
 

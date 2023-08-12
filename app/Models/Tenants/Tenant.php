@@ -2,9 +2,10 @@
 
 namespace App\Models\Tenants;
 
-use App\Models\House;
 use Carbon\Carbon;
 use App\Models\Lease;
+use App\Models\House;
+use App\Traits\HasLogs;
 use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\{HasMany, HasManyThrough, MorphMany};
 
 class Tenant extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasLogs;
 
     protected $fillable = ['name', 'pin', 'phone', 'email', 'address'];
 

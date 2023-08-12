@@ -70,7 +70,6 @@ import {watch} from "vue";
 import {useForm,} from "@inertiajs/vue3";
 import {useToast} from "vue-toastification";
 import AppLayout from '@/Layouts/AppLayout.vue'
-import Checkbox from "@/Components/Checkbox.vue";
 import InputLabel from '@/Components/InputLabel.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextAreaInput from "@/Components/Inputs/TextAreaInput.vue";

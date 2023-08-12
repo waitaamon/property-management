@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounts;
 
+use App\Traits\HasLogs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany};
 
 class BankAccountAdjustmentItem extends Model
 {
-    use HasFactory;
+    use HasFactory, HasLogs;
 
     protected $fillable = ['account_id', 'adjustment_id', 'from', 'to'];
 

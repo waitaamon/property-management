@@ -2,6 +2,7 @@
 
 namespace App\Models\Expenses;
 
+use App\Traits\HasLogs;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany};
 
 class ExpenseCategory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasLogs;
 
     protected $fillable = ['name', 'description'];
 

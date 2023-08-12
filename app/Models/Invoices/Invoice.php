@@ -5,6 +5,7 @@ namespace App\Models\Invoices;
 use App\Models\Tax;
 use App\Models\User;
 use App\Models\Lease;
+use App\Traits\HasLogs;
 use App\Traits\HasApproval;
 use App\Traits\HasSerialCode;
 use App\Enums\ApprovalStatus;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany};
 
 class Invoice extends Model
 {
-    use HasFactory, SoftDeletes, HasSerialCode, HasApproval;
+    use HasFactory, SoftDeletes, HasSerialCode, HasApproval, HasLogs;
 
     protected $fillable = ['code', 'user_id', 'lease_id', 'from', 'to', 'amount', 'tax_id', 'note', 'status'];
 
