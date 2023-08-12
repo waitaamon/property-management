@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Property;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -40,6 +41,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'toast' => $request->session()->get('toast'),
             ],
+            'properties' => Property::select('id', 'name')->get()
         ]);
     }
 }
