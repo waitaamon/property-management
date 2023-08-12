@@ -31,7 +31,7 @@
       <div>
         <InputLabel for="properties" value="Properties"/>
 
-        <v-select v-model="form.properties" :options="$page.props.properties.data" :reduce="property => property.id" class="mt-1 block w-full border-gray-300" label="name" multiple/>
+        <v-select v-model="form.properties" :options="$page.props.properties" :reduce="property => property.id" class="mt-1 block w-full border-gray-300" label="name" multiple/>
 
         <input-error-message name="properties"/>
       </div>

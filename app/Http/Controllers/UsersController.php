@@ -31,7 +31,6 @@ class UsersController extends Controller
             'users' => UserResource::collection($users),
             'filters' =>  $request->all('search','per_page'),
             'roles' => RoleResource::collection(Role::select('id', 'name')->get()),
-            'properties' => PropertyResource::collection(Property::select('id', 'name')->get()),
             'statistics' => [
                 ['name' => 'Total Users', 'icon' => 'UserGroupIcon', 'value' => $users->total()],
             ],

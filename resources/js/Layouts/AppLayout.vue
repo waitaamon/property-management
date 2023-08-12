@@ -51,6 +51,7 @@
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
+                          <property-select-component />
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -299,6 +300,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ToastNotification from "@/Layouts/Components/ToastNotification.vue";
 import ManageDropdownMenuComponent from "@/Layouts/Components/ManageDropdownMenuComponent.vue";
 import ReportsDropdownMenuComponent from "@/Layouts/Components/ReportsDropdownMenuComponent.vue";
+import PropertySelectComponent from "@/Layouts/Components/PropertySelectComponent.vue";
 
 defineProps({
     title: String,

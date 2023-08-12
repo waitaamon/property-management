@@ -33,4 +33,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::controller(\App\Http\Controllers\Tenants\TenantActionsController::class)->group(function () {
         Route::patch('restore-tenant/{tenant}', 'restore')->withTrashed()->name('tenants.restore');
     });
+
+    Route::controller(\App\Http\Controllers\Properties\PropertyActionsController::class)->group(function (){
+        Route::post('update-selected-property', 'updateSelected')->name('update-selected-property');
+    });
 });
