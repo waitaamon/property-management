@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Property;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -11,7 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Actions\Fortify\CreateNewUser;
 use App\Notifications\UserCreatedNotification;
 use App\Http\Resources\Permissions\RoleResource;
-use App\Http\Resources\Properties\PropertyResource;
 use App\Http\Requests\Users\{StoreUserRequest, UpdateUserRequest};
 
 class UsersController extends Controller
@@ -29,7 +27,7 @@ class UsersController extends Controller
 
         return Inertia::render('Users/Index', [
             'users' => UserResource::collection($users),
-            'filters' =>  $request->all('search','per_page'),
+            'filters' => $request->all('search', 'per_page'),
             'roles' => RoleResource::collection(Role::select('id', 'name')->get()),
             'statistics' => [
                 ['name' => 'Total Users', 'icon' => 'UserGroupIcon', 'value' => $users->total()],
@@ -49,9 +47,11 @@ class UsersController extends Controller
 
         $user->roles()->sync($request->collect('roles')->toArray());
 
+        $user->properties()->sync($request->collect('properties')->toArray());
+
         $user->notify(new UserCreatedNotification());
 
-        $this->toast('Successfully created user' );
+        $this->toast('Successfully created user');
 
         return back();
     }
@@ -63,9 +63,9 @@ class UsersController extends Controller
         $user->load('roles');
 
         return Inertia::render('Users/Show', [
-            'logs' =>  [],
-            'user'=> new UserResource($user),
-            'filters' => $request->all('tab','search', 'per_page'),
+            'logs' => [],
+            'user' => new UserResource($user),
+            'filters' => $request->all('tab', 'search', 'per_page'),
         ]);
     }
 
@@ -81,7 +81,9 @@ class UsersController extends Controller
 
         $user->roles()->sync($request->collect('roles')->toArray());
 
-        $this->toast('Successfully updated user' );
+        $user->properties()->sync($request->collect('properties')->toArray());
+
+        $this->toast('Successfully updated user');
 
         return back();
     }
@@ -92,7 +94,7 @@ class UsersController extends Controller
 
         $user->delete();
 
-        $this->toast('Successfully deleted user' , 'error');
+        $this->toast('Successfully deleted user', 'error');
 
         return back();
     }

@@ -21,7 +21,7 @@ class PropertyController extends Controller
             ->withQueryString();
 
         return Inertia::render('Properties/Index', [
-            'properties' => PropertyResource::collection($properties),
+            'allProperties' => PropertyResource::collection($properties),
             'filters' => request()->all('search'),
             'statistics' => [
                 ['name' => 'Total Properties', 'value' => number_format($properties->total()), 'icon' => 'BriefcaseIcon'],
