@@ -14,6 +14,6 @@ class PropertyActionsController extends Controller
 
         $property = Property::select('id', 'name')->find($request->property);
 
-        session()->put('property', $property);
+        session()->put('property', $property->id);
     }
 }

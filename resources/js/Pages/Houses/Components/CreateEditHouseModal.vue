@@ -11,28 +11,15 @@
         </template>
 
         <form class="space-y-4" @submit.prevent="submit">
-
-            <div class="">
-
-                <InputLabel for="property" value="Property"/>
-
-                <v-select
-                    id="property"
-                    v-model="form.property"
-                    :options="$page.props.properties.data"
-                    :reduce="property => property.id"
-                    class="mt-1 block w-full"
-                    label="name"
-                />
-
-                <InputErrorMessage name="property"/>
-            </div>
+            <text-input-group label="Property" name="property" :model-value="$page.props.selected_property.name" disabled/>
 
             <text-input-group v-model="form.name" label="Name" name="name"/>
 
-            <text-input-group type="number" v-model="form.rent" label="Rent" name="rent"/>
+            <number-input-group type="number" v-model="form.rent" label="Rent" name="rent"/>
 
-            <text-input-group type="number" v-model="form.deposit" label="Deposit" name="deposit"/>
+            <number-input-group type="number" v-model="form.deposit" label="Deposit" name="deposit"/>
+
+            <number-input-group type="number" v-model="form.good_will" label="Good will" name="good_will"/>
 
             <text-input-group v-model="form.description" label="Description" name="description"/>
 
@@ -62,8 +49,7 @@ import Checkbox from '@/Components/Checkbox.vue';
 import AppModal from "@/Components/Modal/AppModal.vue"
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInputGroup from "@/Components/Inputs/TextInputGroup.vue"
-import InputErrorMessage from "@/Components/Inputs/InputErrorMessage.vue";
-import InputLabel from "@/Components/InputLabel.vue";
+import NumberInputGroup from "@/Components/Inputs/NumberInputGroup.vue";
 
 const props = defineProps({
     house: {type: Object, required: false},
@@ -77,11 +63,11 @@ let form = useForm({})
 watch(() => props.house, val => {
     form = useForm({
         name: val ? val.name : '',
-        rent: val ? val.rent : '',
-        deposit: val ? val.deposit : '',
+        rent: val ? val.rent : 0,
+        deposit: val ? val.deposit : 0,
+        good_will: val ? val.good_will : 0,
         is_active: val ? val.is_active : true,
         description: val ? val.description : '',
-        property: val ? val.property.id : '',
     })
 }, {immediate: true});
 

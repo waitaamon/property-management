@@ -15,9 +15,9 @@ class StoreHouseRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'property' => ['required', 'integer',  'exists:properties,id'],
             'rent' => ['required', 'numeric', 'min:0'],
             'deposit' => ['required', 'numeric', 'min:0'],
+            'good_will' => ['required', 'numeric', 'min:0'],
             'is_active' => ['required', 'boolean'],
             'description' => ['nullable', 'string'],
         ];

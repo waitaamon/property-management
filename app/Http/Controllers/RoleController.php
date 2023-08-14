@@ -88,7 +88,7 @@ class RoleController extends Controller
         ]);
     }
 
-    public function update(UpdateRoleRequest $request, SpatieRole $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         $this->authorize('update', $role);
 
@@ -96,6 +96,7 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->permissions);
 
+        $role->users()->sync([]);
         $request->collect('users')->each(fn($userId) => AssignUserRole::create($userId, $role));
 
         $this->toast('Successfully updated role');

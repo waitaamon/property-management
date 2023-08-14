@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Properties;
 use Inertia\Inertia;
 use App\Models\Property;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\Properties\PropertyResource;
 use App\Http\Requests\Properties\StorePropertyRequest;
 use App\Http\Requests\Properties\UpdatePropertyRequest;
@@ -15,13 +16,13 @@ class PropertyController extends Controller
     {
         $this->authorize('viewAny', Property::class);
 
-        $properties = Property::query()
+        $properties = auth()->user()->properties()
             ->when(request()->filled('search'), fn($query) => $query->search(['name', 'phone'], request('search')))
             ->paginate(request('perPage', 10))
             ->withQueryString();
 
         return Inertia::render('Properties/Index', [
-            'allProperties' => PropertyResource::collection($properties),
+            'properties' => PropertyResource::collection($properties),
             'filters' => request()->all('search'),
             'statistics' => [
                 ['name' => 'Total Properties', 'value' => number_format($properties->total()), 'icon' => 'BriefcaseIcon'],

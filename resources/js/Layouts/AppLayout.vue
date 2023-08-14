@@ -51,7 +51,9 @@
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
+
                           <property-select-component />
+
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">

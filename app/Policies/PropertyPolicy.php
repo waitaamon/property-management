@@ -32,4 +32,9 @@ class PropertyPolicy
     {
         return $user->can('delete property');
     }
+
+    public function manage(User $user): bool
+    {
+        return $user->can('admin manage all properties');
+    }
 }

@@ -9,7 +9,7 @@ class TenantPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('list tenants');
+        return $user->can('list tenants') && session()->has('property');
     }
 
     public function view(User $user, Tenant $tenant): bool
@@ -19,12 +19,12 @@ class TenantPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create tenant');
+        return $user->can('create tenant') && session()->has('property');
     }
 
     public function update(User $user, Tenant $tenant): bool
     {
-        return $user->can('edit tenant');
+        return $user->can('edit tenant') && session()->has('property');
     }
 
     public function delete(User $user, Tenant $tenant): bool

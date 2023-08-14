@@ -3,8 +3,8 @@
 use App\Models\Property;
 
 if (!function_exists('selectedProperty')) {
-    function selectedProperty(): Property|null
+    function selectedProperty(): Property|int|null
     {
-        return session('property');
+        return session()->has('property') ? session('property') : auth()->user()->properties()->first()?->id;
     }
 }

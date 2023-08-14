@@ -15,6 +15,7 @@ class HouseResource extends JsonResource
             'name' => $this->whenHas('name'),
             'rent' => $this->whenHas('rent'),
             'deposit' => $this->whenHas('deposit'),
+            'good_will' => $this->whenHas('good_will'),
             'is_active' => $this->whenHas('is_active'),
             'created_at' => $this->whenHas('created_at'),
             'description' => $this->whenHas('description'),

@@ -16,14 +16,16 @@ class LeaseResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'note' => $this->whenHas('note'),
             'code' => $this->whenHas('code'),
+            'notes' => $this->whenHas('notes'),
             'state' => $this->whenHas('state'),
             'status' => $this->whenHas('status'),
             'end_date' => $this->whenHas('end_date'),
             'start_date' => $this->whenHas('start_date'),
             'created_at' => $this->whenHas('created_at'),
             'updated_at' => $this->whenHas('updated_at'),
+
+            'amount' => $this->whenLoaded('house', fn() => $this->amount),
 
             'user' => new UserResource($this->whenLoaded('user')),
             'house' => new HouseResource($this->whenLoaded('house')),

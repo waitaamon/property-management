@@ -41,7 +41,7 @@
           <table-th>Actions</table-th>
         </slot>
 
-        <tr v-if="allProperties.data.length" v-for="property in allProperties.data" :key="property.id">
+        <tr v-if="properties.data.length" v-for="property in properties.data" :key="property.id">
           <table-td>
             <Checkbox :id="property.id" v-model:checked="selected" :value="property.id"/>
           </table-td>
@@ -49,7 +49,7 @@
           <table-td class="capitalize">{{ property.location }}</table-td>
           <table-td class="capitalize">{{ property.address }}</table-td>
           <table-td class="capitalize">{{ property.phone }}</table-td>
-          <table-td class="capitalize">{{ property.email }}</table-td>
+          <table-td class="">{{ property.email }}</table-td>
           <table-td>
             <button v-if="property.can.view" type="button" @click.prevent="router.get(route('properties.show', property.id))">
               <EyeIcon aria-hidden="true" class="w-4 h-4 text-blue-800 ml-1"/>
@@ -66,7 +66,7 @@
       </data-table>
 
       <div class="mt-4">
-        <pagination :meta="allProperties.meta"/>
+        <pagination :meta="properties.meta"/>
       </div>
 
     </div>
@@ -92,7 +92,7 @@ import {EyeIcon, PencilSquareIcon, PlusIcon, TrashIcon} from '@heroicons/vue/24/
 import CreateEditPropertyModal from "@/Pages/Properties/Components/CreateEditPropertyModal.vue";
 
 const props = defineProps({
-  allProperties: Object,
+    properties: Object,
   filters: Object,
 })
 

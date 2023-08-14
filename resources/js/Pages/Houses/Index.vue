@@ -37,6 +37,7 @@
                     <table-th>Property</table-th>
                     <table-th>Rent</table-th>
                     <table-th>Deposit</table-th>
+                    <table-th>Good will</table-th>
                     <table-th>Tenant</table-th>
                     <table-th>Is active</table-th>
                     <table-th>Actions</table-th>
@@ -50,6 +51,7 @@
                     <table-td class="capitalize">{{ house.property.name }}</table-td>
                     <table-td class="capitalize">{{ house.rent.toLocaleString() }}</table-td>
                     <table-td class="capitalize">{{ house.deposit.toLocaleString() }}</table-td>
+                    <table-td class="capitalize">{{ house.good_will.toLocaleString() }}</table-td>
                     <table-td class="capitalize"></table-td>
                     <table-td>
                         <CheckCircleIcon aria-hidden="true" class="w-4 h-4 text-green-500 ml-1" v-if="house.is_active"/>

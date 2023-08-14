@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Property;
 use Inertia\Inertia;
 use App\Models\House;
 use App\Models\Lease;
@@ -15,7 +14,6 @@ use App\Http\Resources\Houses\HouseResource;
 use App\Http\Resources\Tenants\TenantResource;
 use App\Http\Requests\Leases\StoreLeaseRequest;
 use App\Http\Requests\Leases\UpdateLeaseRequest;
-use App\Http\Resources\Properties\PropertyResource;
 
 class LeaseController extends Controller
 {
@@ -25,11 +23,12 @@ class LeaseController extends Controller
         $this->authorize('viewAny', Lease::class);
 
         $leases = Lease::query()
-            ->with('tenant', 'house.property', 'user')
+            ->with(['user:id,name', 'tenant:id,name', 'house:id,name'])
+            ->whereRelation('house.property', 'id', selectedProperty())
             ->when(request()->filled('state'), fn(Builder $query) => $query->where('state', request('state')))
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
-            ->when(request()->filled('tenant'), fn(Builder $query) => $query->where('tenant_id', request('tenant')))
             ->when(request()->filled('house'), fn(Builder $query) => $query->where('house_id', request('house')))
+            ->when(request()->filled('tenant'), fn(Builder $query) => $query->where('tenant_id', request('tenant')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('end_date', '<=', request()->date('to')))
             ->when(request()->filled('from'), fn(Builder $query) => $query->whereDate('start_date', '>=', request()->date('from')))
             ->when(request()->filled('search'), fn($query) => $query->search(['code', 'tenant.name', 'house.code'], request('search')))
@@ -42,8 +41,8 @@ class LeaseController extends Controller
             'states' => LeaseState::cases(),
             'statuses' => ApprovalStatus::cases(),
             'leases' => LeaseResource::collection($leases),
-            'houses' => HouseResource::collection(House::select('id', 'name')->get()),
             'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
+            'houses' => HouseResource::collection(House::select('id', 'name')->where('property_id', selectedProperty())->get()),
             'can' => [
                 'create' => auth()->user()->can('create', Lease::class)
             ]
@@ -55,10 +54,7 @@ class LeaseController extends Controller
         $this->authorize('create', Lease::class);
 
         return Inertia::render('Leases/Create', [
-            'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
-            'properties' => PropertyResource::collection(Property::select('id', 'name')
-                ->with(['houses' => fn($query) => $query->select('property_id', 'id', 'name')->where('is_active', true)])->get()
-            ),
+            ...$this->createEditData()
         ]);
     }
 
@@ -93,12 +89,9 @@ class LeaseController extends Controller
 
         $lease->load('house', 'tenant');
 
-        $properties = Property::select('id', 'name')->with(['houses' => fn($query) => $query->select('property_id', 'id', 'name')->where('is_active', true)])->get();
-
         return Inertia::render('Leases/Create', [
-            'lease' => LeaseController::collection($lease),
-            'properties' => PropertyResource::collection($properties),
-            'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
+            ...$this->createEditData(),
+            'lease' => new LeaseResource($lease),
         ]);
     }
 
@@ -126,6 +119,8 @@ class LeaseController extends Controller
         ]);
 
         $this->toast('Successfully updated lease.');
+
+        return redirect()->route('leases.show', $lease);
     }
 
     public function destroy(Lease $lease)
@@ -135,5 +130,21 @@ class LeaseController extends Controller
         $lease->delete();
 
         $this->toast('Successfully updated lease.');
+    }
+
+    protected function createEditData(): array
+    {
+        $houses = House::query()
+            ->select('id', 'name', 'property_id')
+            ->where('property_id', selectedProperty())
+            ->whereHas('leases', fn(Builder $query) => $query->where('end_date', null))
+            ->get();
+
+        $tenants = Tenant::select('id', 'name')->get();
+
+        return [
+            'houses' => HouseResource::collection($houses),
+            'tenants' => TenantResource::collection($tenants),
+        ];
     }
 }

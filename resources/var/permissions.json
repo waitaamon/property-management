@@ -48,6 +48,10 @@
         "group": "properties"
     },
     {
+        "name": "admin manage all properties",
+        "group": "properties"
+    },
+    {
         "name": "list houses",
         "group": "houses"
     },

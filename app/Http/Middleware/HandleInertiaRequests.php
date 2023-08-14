@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\Properties\PropertyResource;
 use App\Models\Property;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,8 +43,10 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'toast' => $request->session()->get('toast'),
             ],
-            'selected_property' => session()->has('property') ? session('property') : (auth()->check() ? auth()->user()->properties()->first() : ''),
-            'properties' => Property::select('id', 'name')->get()
+            'selected_property' => session()->has('property') ? session('property') : (auth()->check() ? auth()->user()->properties()->first()?->id : ''),
+            'user_properties' => auth()->check()
+                ? PropertyResource::collection(auth()->user()->properties()->select('id', 'name')->get())
+                : []
         ]);
     }
 }

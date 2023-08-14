@@ -1,14 +1,14 @@
 <template>
-    <AppLayout title="Sale order">
+    <AppLayout title="Lease">
 
         <div class="max-w-7xl mx-auto flex justify-between py-6">
 
             <div>
-                <h2 class="text-xl leading-7 font-bold text-purple-900">{{ saleOrder.data.code }} Sale</h2>
+                <h2 class="text-xl leading-7 font-bold text-purple-900">{{ lease.data.code }} Lease</h2>
             </div>
 
             <div>
-                <app-approval-buttons :model="saleOrder.data" model-string="SaleOrder"/>
+                <app-approval-buttons :model="lease.data" model-string="lease"/>
             </div>
 
         </div>
@@ -17,16 +17,17 @@
 
             <div class="flex justify-between">
                 <div class="space-y-3">
-                    <template v-if="saleOrder.data.customer">
-                        <p>Customer: <span class="font-bold">{{ saleOrder.data.customer.name }}</span></p>
-                        <p>Customer Pin: <span class="font-bold">{{ saleOrder.data.customer.pin }}</span></p>
+                    <template v-if="lease.data.tenant">
+                        <p>Tenant: <span class="font-bold">{{ lease.data.tenant.name }}</span></p>
+                        <p>Tenant Pin: <span class="font-bold">{{ lease.data.tenant.pin }}</span></p>
+                        <p>Address: <span class="font-bold">{{ lease.data.tenant.address }}</span></p>
                     </template>
                 </div>
                 <div class="space-y-3">
-                    <p>Code: <span class="font-bold">{{ saleOrder.data.code }}</span></p>
-                    <p>Created By: <span class="font-bold">{{ saleOrder.data.user.name }}</span></p>
-                    <p>Date: <span class="font-bold">{{ moment(saleOrder.data.created_at).format('DD MMM Y HH:mm:ss') }}</span></p>
-                    <p>Status: <span class="font-bold capitalize">{{ saleOrder.data.status }}</span></p>
+                    <p>Code: <span class="font-bold">{{ lease.data.code }}</span></p>
+                    <p>Created By: <span class="font-bold">{{ lease.data.user.name }}</span></p>
+                    <p>Date: <span class="font-bold">{{ moment(lease.data.created_at).format('DD MMM Y HH:mm:ss') }}</span></p>
+                    <p>Status: <span class="font-bold capitalize">{{ lease.data.status }}</span></p>
                 </div>
             </div>
 
@@ -36,54 +37,37 @@
                         <table-th>
                             #
                         </table-th>
-                        <table-th>Product</table-th>
-                        <table-th>Quantity</table-th>
-                        <table-th>Unit price</table-th>
+                        <table-th>Property</table-th>
+                        <table-th>House</table-th>
+                        <table-th>Rent</table-th>
+                        <table-th>Discount</table-th>
+                        <table-th>Good will</table-th>
                         <table-th>Total amount</table-th>
                     </slot>
 
-                   <template v-if="saleOrder.data.items.length">
-                       <tr v-for="(item, index) in saleOrder.data.items"  :key="item.id">
-                           <table-td>
-                               {{ index + 1 }}
-                           </table-td>
-                           <table-td>{{ item.product.name }}</table-td>
-                           <table-td>{{ item.quantity }}</table-td>
-                           <table-td>{{ item.unit_price.toLocaleString() }}</table-td>
-                           <table-td>{{ item.total_price.toLocaleString() }}</table-td>
-                       </tr>
-                       <template v-if="saleOrder.data.tax">
-                           <tr>
-                               <table-td />
-                               <table-td colspan="3" class="font-bold">Amount</table-td>
-                               <table-td> {{ saleOrder.data.amount.toLocaleString() }}</table-td>
-                           </tr>
-                           <tr>
-                               <table-td />
-                               <table-td colspan="3" class="font-bold">Tax ({{ saleOrder.data.tax.name }})</table-td>
-                               <table-td> {{ saleOrder.data.total_tax.toLocaleString() }}</table-td>
-                           </tr>
-                       </template>
-                       <tr>
-                           <table-td />
-                           <table-td colspan="3" class="font-bold">Total amount</table-td>
-                           <table-td class="font-bold"> {{ saleOrder.data.total_amount.toLocaleString() }}</table-td>
-                       </tr>
-
-                   </template>
-                    <table-no-data-tr v-else colspan="5"/>
+                    <tr>
+                        <table-td>
+                            1
+                        </table-td>
+                        <table-td>{{ lease.data.house.property.name }}</table-td>
+                        <table-td>{{ lease.data.house.name }}</table-td>
+                        <table-td>{{ lease.data.house.rent.toLocaleString() }}</table-td>
+                        <table-td>{{ lease.data.house.deposit.toLocaleString() }}</table-td>
+                        <table-td>{{ lease.data.house.good_will.toLocaleString() }}</table-td>
+                        <table-td class="font-bold">{{ lease.data.amount.toLocaleString() }}</table-td>
+                    </tr>
                 </data-table>
 
                 <div class="py-4 w-full grid grid-cols-2 gap-6">
 
                     <div class="col-span-1">
-                        <h4 class="font-bold text-sm text-gray-800">Note:</h4>
-                        <p class="mt-2 text-sm text-gray-700 tracking-wide text-justify">{{ saleOrder.data.note }}</p>
+                        <h4 class="font-bold text-sm text-gray-800">Notes:</h4>
+                        <p class="mt-2 text-sm text-gray-700 tracking-wide text-justify">{{ lease.data.notes }}</p>
                     </div>
 
                     <div class="col-span-1 mt-6">
 
-                        <div v-for="approval in saleOrder.data.approvals" :key="approval.id" >
+                        <div v-for="approval in lease.data.approvals" :key="approval.id">
                             <div class="bg-blue-50 px-2 py-2 rounded border-b mb-2">
                                 <p class="capitalize text-gray-800">
                                     <span class="font-bold">{{ approval.status }}</span>
@@ -111,7 +95,7 @@ import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
 import AppApprovalButtons from "@/Components/AppApprovalButtons.vue";
 
 const props = defineProps({
-    saleOrder: Object
+    lease: Object
 })
 
 </script>

@@ -3,9 +3,9 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <h2 class="text-2xl leading-7 font-bold text-purple-900 mt-10"> {{
-                    lease ? 'Update ' : 'Create new '
-                }}lease</h2>
+            <h2 class="text-2xl leading-7 font-bold text-purple-900 mt-10">
+                {{ lease ? 'Update ' : 'Create new ' }}lease
+            </h2>
 
         </div>
 
@@ -33,18 +33,7 @@
 
                     <div class="col-span-1">
 
-                        <InputLabel for="property" value="Property *"/>
-
-                        <v-select
-                            id="property"
-                            v-model="form.property"
-                            :options="$page.props.properties.data"
-                            :reduce="property => property.id"
-                            class="mt-1 block w-full"
-                            label="name"
-                        />
-
-                        <InputErrorMessage name="property"/>
+                        <text-input-group :model-value="$page.props.user_properties.data.find(property => property.id === $page.props.selected_property).name" label="Property" name="property" disabled/>
                     </div>
 
                     <div class="col-span-1">
@@ -54,7 +43,7 @@
                         <v-select
                             id="house"
                             v-model="form.house"
-                            :options="houses"
+                            :options="$page.props.houses.data"
                             :reduce="house => house.id"
                             class="mt-1 block w-full"
                             label="name"
@@ -71,7 +60,7 @@
                     </div>
                 </div>
 
-                <text-area-input v-model="form.note" label="Note" name="note"/>
+                <text-area-input v-model="form.notes" label="Note" name="note"/>
 
                 <div class="mt-4">
 
@@ -104,23 +93,16 @@ const props = defineProps({
 const toast = useToast()
 
 let form = useForm({})
-const houses = ref([])
 
 watch(() => props.lease, val => {
     form = useForm({
-        note: val ? val.data.note : '',
+        notes: val ? val.data.notes : '',
         house: val ? val.data.house.id : '',
         tenant: val ? val.data.tenant.id : '',
         end_date: val ? val.data.end_date : '',
         start_date: val ? val.data.start_date : '',
-        property: val ? val.data.house.property.id : '',
     })
 }, {immediate: true})
-
-watch(() => form.property, val => {
-    const property = usePage().props.properties.data.find(property => val === property.id)
-    houses.value = val ? (property ? property.houses : []) : []
-})
 
 const submit = () => {
 

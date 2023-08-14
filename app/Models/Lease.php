@@ -33,6 +33,11 @@ class Lease extends Model
         return Attribute::make(get: fn() => $this->house?->property?->name . ' - ' . $this->house?->name);
     }
 
+    protected function amount(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->house?->rent + $this->house?->deposit +  $this->house?->good_will);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

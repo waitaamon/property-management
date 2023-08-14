@@ -38,10 +38,10 @@
                     <table-th>Code</table-th>
                     <table-th>Tenant</table-th>
                     <table-th>House</table-th>
-                    <table-th>Property</table-th>
                     <table-th>Start date</table-th>
                     <table-th>End date</table-th>
                     <table-th>State</table-th>
+                    <table-th>Status</table-th>
                     <table-th>Actions</table-th>
                 </slot>
 
@@ -52,10 +52,10 @@
                     <table-td>{{ lease.code }}</table-td>
                     <table-td class="capitalize">{{ lease.tenant.name }}</table-td>
                     <table-td class="capitalize">{{ lease.house.name }}</table-td>
-                    <table-td class="capitalize">{{ lease.house.property.name }}</table-td>
                     <table-td class="capitalize">{{ moment(lease.start_date).format('DD MMM Y') }}</table-td>
                     <table-td class="capitalize">{{ lease.end_date ? moment(lease.end_date).format('DD MMM Y'): '' }}</table-td>
                     <table-td class="capitalize">{{ lease.state }}</table-td>
+                    <table-td class="capitalize">{{ lease.status }}</table-td>
 
                     <table-td>
                         <button v-if="lease.can.view" type="button" @click.prevent="router.get(route('leases.show', lease.id))">

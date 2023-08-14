@@ -11,7 +11,7 @@ class LeasePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('list leases');
+        return $user->can('list leases') && session()->has('property');
     }
 
     public function view(User $user, Lease $lease): bool
@@ -21,12 +21,12 @@ class LeasePolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create lease');
+        return $user->can('create lease') && session()->has('property');
     }
 
     public function update(User $user, Lease $lease): bool
     {
-        return $user->can('update lease');
+        return $user->can('update lease') && session()->has('property');
     }
 
     public function delete(User $user, Lease $lease): bool
