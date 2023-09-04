@@ -23,6 +23,7 @@
         "@headlessui/vue": "^1.7.14",
         "@heroicons/vue": "^2.0.18",
         "@popperjs/core": "^2.11.6",
+        "@vuepic/vue-datepicker": "^6.0.3",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
         "print-js": "^1.6.0",

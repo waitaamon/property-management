@@ -53,7 +53,7 @@
                         <table-td>{{ lease.data.house.name }}</table-td>
                         <table-td>{{ lease.data.house.rent.toLocaleString() }}</table-td>
                         <table-td>{{ lease.data.house.deposit.toLocaleString() }}</table-td>
-                        <table-td>{{ lease.data.house.good_will.toLocaleString() }}</table-td>
+                        <table-td>{{ lease.data.house.goodwill.toLocaleString() }}</table-td>
                         <table-td class="font-bold">{{ lease.data.amount.toLocaleString() }}</table-td>
                     </tr>
                 </data-table>

@@ -51,7 +51,7 @@
                     <table-td class="capitalize">{{ house.property.name }}</table-td>
                     <table-td class="capitalize">{{ house.rent.toLocaleString() }}</table-td>
                     <table-td class="capitalize">{{ house.deposit.toLocaleString() }}</table-td>
-                    <table-td class="capitalize">{{ house.good_will.toLocaleString() }}</table-td>
+                    <table-td class="capitalize">{{ house.goodwill.toLocaleString() }}</table-td>
                     <table-td class="capitalize"></table-td>
                     <table-td>
                         <CheckCircleIcon aria-hidden="true" class="w-4 h-4 text-green-500 ml-1" v-if="house.is_active"/>

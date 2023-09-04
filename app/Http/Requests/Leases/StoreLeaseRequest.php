@@ -17,7 +17,6 @@ class StoreLeaseRequest extends FormRequest
             'tenant' => ['required', 'integer', 'exists:tenants,id'],
             'house' => ['required', 'integer', 'exists:houses,id'],
             'start_date' => ['required', 'date',],
-            'end_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],
         ];
     }

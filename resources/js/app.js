@@ -14,6 +14,9 @@ import 'vue-select/dist/vue-select.css';
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
@@ -27,6 +30,7 @@ createInertiaApp({
             .use(VueNumberFormat, {
                 "prefix": "KES",
             })
+            .component('date-picker', VueDatePicker)
             .component("v-select", vSelect)
             .mount(el);
     },

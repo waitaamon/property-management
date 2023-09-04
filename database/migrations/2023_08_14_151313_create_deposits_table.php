@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payment_id')->constrained();
+            $table->foreignId('lease_id')->constrained();
             $table->bigInteger('amount')->default(0);
             $table->dateTime('refund_date')->nullable();
             $table->timestamps();

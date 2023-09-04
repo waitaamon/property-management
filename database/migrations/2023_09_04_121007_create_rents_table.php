@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->foreignId('lease_id')->after('bank_account_id')->constrained();
+        Schema::create('rents', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('lease_id');
+            $table->bigInteger('amount');
+            $table->date('date');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -21,9 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('payments_lease_id_foreign');
-            $table->dropColumn('lease_id');
-        });
+        Schema::dropIfExists('rents');
     }
 };

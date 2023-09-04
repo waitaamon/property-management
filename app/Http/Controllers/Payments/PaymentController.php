@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Payments;
 
-use App\Enums\ApprovalStatus;
 use Inertia\Inertia;
+use App\Enums\ApprovalStatus;
 use App\Models\Tenants\Tenant;
 use App\Models\Payments\Payment;
 use App\Models\Accounts\BankAccount;

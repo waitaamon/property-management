@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Spatie\Permission\Models\Permission;
 
 class UserSeeder extends Seeder
 {
@@ -15,11 +17,11 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'James Muchoki' ,
+                'name' => 'James Muchoki',
                 'email' => 'james.muchoki@patialadistillerskenya.com',
             ],
             [
-                'name' => 'Amon Waita' ,
+                'name' => 'Amon Waita',
                 'email' => 'waitaamon@yahoo.com',
             ],
             [
@@ -28,6 +30,15 @@ class UserSeeder extends Seeder
             ]
         ];
 
-        collect($users)->each(fn($user) => User::create([...$user, 'password' => bcrypt('password')]));
+        $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'sanctum']);
+        $adminRole->permissions()->sync(Permission::pluck('id')->toArray());
+
+        collect($users)->each(function ($user) use ($adminRole) {
+            $savedUser = User::create([...$user, 'password' => bcrypt('password')]);
+
+            $savedUser->properties()->sync([1, 2]);
+
+            $savedUser->assignRole($adminRole);
+        });
     }
 }

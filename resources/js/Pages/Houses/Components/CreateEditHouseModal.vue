@@ -19,7 +19,7 @@
 
             <number-input-group type="number" v-model="form.deposit" label="Deposit" name="deposit"/>
 
-            <number-input-group type="number" v-model="form.good_will" label="Good will" name="good_will"/>
+            <number-input-group type="number" v-model="form.goodwill" label="Good will" name="goodwill"/>
 
             <text-input-group v-model="form.description" label="Description" name="description"/>
 
@@ -65,7 +65,7 @@ watch(() => props.house, val => {
         name: val ? val.name : '',
         rent: val ? val.rent : 0,
         deposit: val ? val.deposit : 0,
-        good_will: val ? val.good_will : 0,
+        goodwill: val ? val.goodwill : 0,
         is_active: val ? val.is_active : true,
         description: val ? val.description : '',
     })

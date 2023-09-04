@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Leases;
 
 use Inertia\Inertia;
 use App\Models\House;
@@ -8,11 +8,12 @@ use App\Models\Lease;
 use App\Enums\LeaseState;
 use App\Enums\ApprovalStatus;
 use App\Models\Tenants\Tenant;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
-use App\Http\Resources\Leases\LeaseResource;
 use App\Http\Resources\Houses\HouseResource;
-use App\Http\Resources\Tenants\TenantResource;
+use App\Http\Resources\Leases\LeaseResource;
 use App\Http\Requests\Leases\StoreLeaseRequest;
+use App\Http\Resources\Tenants\TenantResource;
 use App\Http\Requests\Leases\UpdateLeaseRequest;
 
 class LeaseController extends Controller
@@ -75,7 +76,6 @@ class LeaseController extends Controller
             'house_id' => $request->house,
             'tenant_id' => $request->tenant,
             'start_date' => $request->date('start_date'),
-            'end_date' => $request->date('end_date'),
         ]);
 
         $this->toast('Successfully saved lease.');
@@ -115,7 +115,6 @@ class LeaseController extends Controller
             'house_id' => $request->house,
             'tenant_id' => $request->tenant,
             'start_date' => $request->date('start_date'),
-            'end_date' => $request->date('end_date'),
         ]);
 
         $this->toast('Successfully updated lease.');

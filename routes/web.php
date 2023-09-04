@@ -1,7 +1,7 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('debug', \App\Http\Controllers\DebugController::class);
 
@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resources([
         'roles' => \App\Http\Controllers\RoleController::class,
-        'leases' => \App\Http\Controllers\LeaseController::class,
+        'leases' => \App\Http\Controllers\Leases\LeaseController::class,
         'invoices' => \App\Http\Controllers\Invoices\InvoiceController::class,
         'expenses' => \App\Http\Controllers\Expenses\ExpenseController::class,
         'payments' => \App\Http\Controllers\Payments\PaymentController::class,

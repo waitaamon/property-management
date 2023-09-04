@@ -13,12 +13,12 @@ class House extends Model
 {
     use HasFactory, SoftDeletes, HasLogs;
 
-    protected $fillable = ['property_id', 'name', 'description', 'deposit', 'rent', 'good_will', 'is_active'];
+    protected $fillable = ['property_id', 'name', 'description', 'deposit', 'rent', 'goodwill', 'is_active'];
 
     protected $casts = [
         'rent' => 'float',
         'deposit' => 'float',
-        'good_will' => 'float',
+        'goodwill' => 'float',
         'is_active' => 'boolean',
     ];
 

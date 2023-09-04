@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Lease;
 use App\Models\House;
 use App\Traits\HasLogs;
-use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,11 +74,6 @@ class Tenant extends Model
     public function houses(): HasManyThrough
     {
         return $this->hasManyThrough(House::class, Lease::class);
-    }
-
-    public function invoices(): HasMany
-    {
-        return $this->hasMany(Invoice::class);
     }
 
     public function statements(): MorphMany

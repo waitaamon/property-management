@@ -3,30 +3,24 @@
 namespace App\Models\Invoices;
 
 use App\Models\Tax;
-use App\Models\User;
-use App\Models\Lease;
 use App\Traits\HasLogs;
 use App\Traits\HasApproval;
 use App\Traits\HasSerialCode;
-use App\Enums\ApprovalStatus;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany, MorphTo};
 
 class Invoice extends Model
 {
     use HasFactory, SoftDeletes, HasSerialCode, HasApproval, HasLogs;
 
-    protected $fillable = ['code', 'user_id', 'lease_id', 'from', 'to', 'amount', 'tax_id', 'note', 'status'];
+    protected $fillable = ['code', 'amount', 'tax_id'];
 
     protected $casts = [
-        'to' => 'date',
-        'from' => 'date',
         'amount' => 'integer',
-        'status' => ApprovalStatus::class,
     ];
 
     protected function totalAmount(): Attribute
@@ -44,19 +38,14 @@ class Invoice extends Model
         return Attribute::make(get: fn() => true);
     }
 
-    public function user(): BelongsTo
+    public function invoiceable(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
     public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
-    }
-
-    public function lease(): BelongsTo
-    {
-        return $this->belongsTo(Lease::class);
     }
 
     public function statements(): MorphMany

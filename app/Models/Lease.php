@@ -8,12 +8,11 @@ use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
 use App\Models\Tenants\Tenant;
-use App\Models\Invoices\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany, HasOne};
 
 class Lease extends Model
 {
@@ -35,7 +34,7 @@ class Lease extends Model
 
     protected function amount(): Attribute
     {
-        return Attribute::make(get: fn() => $this->house?->rent + $this->house?->deposit +  $this->house?->good_will);
+        return Attribute::make(get: fn() => $this->house?->rent + $this->house?->deposit +  $this->house?->goodwill);
     }
 
     public function user(): BelongsTo
@@ -53,8 +52,18 @@ class Lease extends Model
         return $this->belongsTo(Tenant::class);
     }
 
-    public function invoices(): HasMany
+    public function rents(): HasMany
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Rent::class);
+    }
+
+    public function deposit(): HasOne
+    {
+        return $this->hasOne(Deposit::class);
+    }
+
+    public function goodwill(): HasOne
+    {
+        return $this->hasOne(Goodwill::class);
     }
 }

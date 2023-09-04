@@ -40,7 +40,7 @@ class HouseController extends Controller
         $this->authorize('create', House::class);
 
         House::create([
-            ...$request->only('name', 'rent', 'deposit', 'description', 'is_active', 'good_will'),
+            ...$request->only('name', 'rent', 'deposit', 'description', 'is_active', 'goodwill'),
             'property_id' => selectedProperty()
         ]);
 
@@ -68,7 +68,7 @@ class HouseController extends Controller
     {
         $this->authorize('update', $house);
         $house->update([
-            ...$request->only('name', 'rent', 'deposit', 'description', 'is_active', 'good_will'),
+            ...$request->only('name', 'rent', 'deposit', 'description', 'is_active', 'goodwill'),
             'property_id' => selectedProperty()
         ]);
 

@@ -6,7 +6,7 @@ use App\Traits\HasLogs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany, HasManyThrough};
 
 class Property extends Model
 {
@@ -22,5 +22,10 @@ class Property extends Model
     public function houses(): HasMany
     {
         return $this->hasMany(House::class);
+    }
+
+    public function leases(): HasManyThrough
+    {
+        return $this->hasManyThrough(Lease::class, House::class);
     }
 }

@@ -13,9 +13,9 @@
 
             <form class="space-y-4" @submit.prevent="submit">
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-3">
 
-                    <div class="col-span-2">
+                    <div >
 
                         <InputLabel for="tenant" value="Tenant *"/>
 
@@ -31,12 +31,12 @@
                         <InputErrorMessage name="tenant"/>
                     </div>
 
-                    <div class="col-span-1">
+                    <div >
 
                         <text-input-group :model-value="$page.props.user_properties.data.find(property => property.id === $page.props.selected_property).name" label="Property" name="property" disabled/>
                     </div>
 
-                    <div class="col-span-1">
+                    <div>
 
                         <InputLabel for="house" value="House *"/>
 
@@ -52,11 +52,9 @@
                         <InputErrorMessage name="house"/>
                     </div>
 
-                    <div class="col-span-1">
-                        <text-input-group v-model="form.start_date" label="Start date *" name="start_date" type="date"/>
-                    </div>
-                    <div class="col-span-1">
-                        <text-input-group v-model="form.end_date" label="End date" name="end_date" type="date"/>
+                    <div>
+                        <InputLabel value="Start date" />
+                        <date-picker v-model="form.start_date" placeholder="start date ..." format="dd/MM/yyyy" :enableTimePicker="false" autoApply position="left"/>
                     </div>
                 </div>
 
@@ -76,8 +74,9 @@
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
-import {useForm, usePage} from "@inertiajs/vue3";
+import {watch} from "vue";
+import moment from "moment";
+import {useForm} from "@inertiajs/vue3";
 import {useToast} from "vue-toastification";
 import AppLayout from '@/Layouts/AppLayout.vue'
 import InputLabel from '@/Components/InputLabel.vue'
@@ -100,7 +99,7 @@ watch(() => props.lease, val => {
         house: val ? val.data.house.id : '',
         tenant: val ? val.data.tenant.id : '',
         end_date: val ? val.data.end_date : '',
-        start_date: val ? val.data.start_date : '',
+        start_date: val ? moment(val.data.start_date) : '',
     })
 }, {immediate: true})
 

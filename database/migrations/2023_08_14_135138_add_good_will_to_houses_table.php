@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('houses', function (Blueprint $table) {
-            $table->bigInteger('good_will')->default(0)->after('deposit');
+            $table->bigInteger('goodwill')->default(0)->after('deposit');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('houses', function (Blueprint $table) {
-            $table->dropColumn('good_will');
+            $table->dropColumn('goodwill');
         });
     }
 };
