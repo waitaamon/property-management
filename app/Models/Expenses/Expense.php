@@ -19,7 +19,7 @@ class Expense extends Model
 {
     use HasFactory, SoftDeletes, HasApproval, HasSerialCode, HasLogs;
 
-    protected $fillable = ['code', 'expense_category_id', 'bank_account_id', 'user_id', 'amount', 'status', 'note'];
+    protected $fillable = ['code', 'expense_category_id', 'bank_account_id', 'property_id', 'user_id', 'amount', 'status', 'note'];
 
     protected $casts = [
         'amount' => 'integer',

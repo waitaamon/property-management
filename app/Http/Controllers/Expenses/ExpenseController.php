@@ -7,7 +7,6 @@ use App\Enums\ApprovalStatus;
 use App\Models\Expenses\Expense;
 use App\Http\Controllers\Controller;
 use App\Models\Accounts\BankAccount;
-use App\Jobs\UpdateModelApprovalAction;
 use App\Models\Expenses\ExpenseCategory;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\Expenses\ExpenseResource;
@@ -24,6 +23,7 @@ class ExpenseController extends Controller
 
         $expenses = Expense::query()
             ->with('bankAccount', 'category')
+            ->where('property_id', selectedProperty())
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
             ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
             ->when(request()->filled('category'), fn(Builder $query) => $query->where('expense_category_id', request('category')))
@@ -59,18 +59,13 @@ class ExpenseController extends Controller
     {
         $this->authorize('create', Expense::class);
 
-        $expense = Expense::create([
+        Expense::create([
             ...$request->only('note', 'amount'),
             'user_id' => auth()->id(),
+            'property_id' => selectedProperty(),
             'bank_account_id' => request('account'),
             'expense_category_id' => request('category'),
         ]);
-
-        if (auth()->user()->can('approve', $expense)) {
-
-            UpdateModelApprovalAction::dispatch($expense, $expense->user, ApprovalStatus::APPROVED, 'approved on create');
-
-        }
 
         $this->toast('Successfully created expense.');
 

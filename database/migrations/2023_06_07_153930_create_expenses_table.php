@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('expense_category_id')->constrained();
+            $table->foreignId('property_id')->constrained();
             $table->foreignId('bank_account_id')->nullable()->constrained();
             $table->decimal('amount')->default(0);
             $table->string('status')->default('pending approval');

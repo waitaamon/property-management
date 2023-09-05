@@ -13,7 +13,7 @@ class ExpenseCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = ['Fuel', 'Repairs & spares', 'Transport', 'KRA'];
+        $categories = ['VAT Expenses', 'Electricity', 'Water', 'Salaries', 'Wages', 'Cleaning', 'Repair and Maintenance', 'Transport', 'Office Expenses', 'Equipments', 'Service Charges', 'Medical'];
 
         collect($categories)->each(fn($category) => ExpenseCategory::create(['name' => $category]));
     }
