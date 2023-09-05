@@ -11,9 +11,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/print-document', \App\Http\Controllers\PrintController::class)->name('print-document');
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::post('approve', \App\Http\Controllers\ApprovalController::class)->name('approve');
 

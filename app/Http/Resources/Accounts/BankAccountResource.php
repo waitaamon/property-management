@@ -13,8 +13,8 @@ class BankAccountResource extends JsonResource
             'id' => $this->id,
             'name' => $this->whenHas('name'),
             'is_active' => !$this->resource->trashed(),
-            'balance' => $this->whenAppended('balance'),
             'created_at' => $this->whenHas('created_at'),
+            'balance' => $this->balance,
 
             'transactions' => TransactionResource::collection($this->whenLoaded('transactions')),
             'adjustments' => BankAccountAdjustmentResource::collection($this->whenLoaded('adjustments')),
