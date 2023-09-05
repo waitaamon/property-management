@@ -1,38 +1,36 @@
 <?php
 
-namespace App\Models\Accounts;
+namespace App\Models\Tenants;
 
-use App\Models\Expenses\Expense;
-use App\Models\Invoices\Invoice;
-use App\Models\Payments\Payment;
 use App\Traits\HasLogs;
 use App\Traits\HasSerialCode;
+use App\Models\Invoices\Invoice;
+use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphTo};
 
-class AccountStatement extends Model
+class TenantStatement extends Model
 {
+    use HasFactory;
+
     use HasFactory, SoftDeletes, HasSerialCode, HasLogs;
 
-    protected $fillable = ['code', 'amount', 'balance', 'action', 'accountable_id', 'accountable_type'];
+    protected $fillable = ['code', 'amount', 'balance', 'action', 'tenant_id', 'description'];
 
     protected $casts = [
-        'amount' => 'float',
-        'balance' => 'float',
+        'amount' => 'integer',
+        'balance' => 'integer',
         'action' => 'boolean',
     ];
-
-    protected $appends = ['causer'];
 
     protected function causer(): Attribute
     {
         return Attribute::make(get: function () {
             return match (true) {
                 $this->statementable instanceof Payment => 'payment',
-                $this->statementable instanceof Expense => 'expense',
                 $this->statementable instanceof Invoice => 'invoice',
                 default => '',
             };
@@ -44,8 +42,8 @@ class AccountStatement extends Model
         return $this->morphTo();
     }
 
-    public function accountable(): MorphTo
+    public function tenant():BelongsTo
     {
-        return $this->morphTo();
+        return  $this->belongsTo(Tenant::class);
     }
 }

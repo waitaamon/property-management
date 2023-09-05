@@ -2,13 +2,15 @@
 
 namespace App\Http\Resources\Invoices;
 
-use App\Http\Resources\Accounts\AccountStatementResource;
-use App\Http\Resources\ApprovalResource;
-use App\Http\Resources\Houses\HouseResource;
-use App\Http\Resources\TaxResource;
+use App\Http\Resources\Deposits\DepositResource;
+use App\Http\Resources\Goodwill\GoodwillResource;
+use App\Http\Resources\Rent\RentResource;
+use App\Models\Deposit;
+use App\Models\Goodwill;
+use App\Models\Rent;
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\Leases\LeaseResource;
+use App\Http\Resources\TaxResource;
+use App\Http\Resources\Tenants\TenantResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class InvoiceResource extends JsonResource
@@ -28,13 +30,17 @@ class InvoiceResource extends JsonResource
             'created_at' => $this->whenHas('created_at'),
             'updated_at' => $this->whenHas('updated_at'),
 
-            'tax' => new TaxResource($this->whenLoaded('tax')),
-            'user' => new UserResource($this->whenLoaded('user')),
-            'lease' => new LeaseResource($this->whenLoaded('lease')),
-            'houses' => new HouseResource($this->whenLoaded('houses')),
-            'approvals' => ApprovalResource::collection($this->whenLoaded('approvals')),
-            'statements' => AccountStatementResource::collection($this->whenLoaded('statements')),
+            'causer' => $this->whenLoaded('invoiceable', fn() => $this->causer),
 
+            'tax' => new TaxResource($this->whenLoaded('tax')),
+            'tenant' => new TenantResource($this->whenLoaded('tenant')),
+            'invoiceable' => $this->whenLoaded('invoiceable', function () {
+                return match (true) {
+                    $this->invoiceable instanceof Rent => new RentResource($this->invoiceable->load('lease.house')),
+                    $this->invoiceable instanceof Deposit => new DepositResource($this->invoiceable->load('lease.house')),
+                    $this->invoiceable instanceof Goodwill => new GoodwillResource($this->invoiceable->load('lease.house')),
+                };
+            }),
 
             'can' => [
                 'view' => auth()->user()->can('view', $this->resource),

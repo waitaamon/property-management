@@ -36,6 +36,7 @@
                         <Checkbox v-model:checked="selectAll" type="checkbox"/>
                     </table-th>
                     <table-th>Code</table-th>
+                    <table-th>Causer</table-th>
                     <table-th>Tenant</table-th>
                     <table-th>House</table-th>
                     <table-th>Amount</table-th>
@@ -49,10 +50,11 @@
                         <Checkbox :id="invoice.id" v-model:checked="selected" :value="invoice.id"/>
                     </table-td>
                     <table-td>{{ invoice.code }}</table-td>
-                    <table-td class="capitalize">{{ invoice.lease.tenant.name }}</table-td>
-                    <table-td class="capitalize">{{ invoice.lease.house.name }}</table-td>
+                    <table-td class="capitalize">{{ invoice.causer }}</table-td>
+                    <table-td class="capitalize">{{ invoice.tenant.name }}</table-td>
+                    <table-td class="capitalize">{{ invoice.invoiceable.lease.house.name }}</table-td>
                     <table-td class="capitalize">{{ invoice.amount.toLocaleString() }}</table-td>
-                    <table-td class="capitalize">{{ invoice.status }}</table-td>
+                    <table-td class="capitalize">{{ invoice.status}}</table-td>
                     <table-td class="capitalize">{{ moment(invoice.created_at).format('DD MMM Y HH:mm:ss') }}</table-td>
 
                     <table-td>

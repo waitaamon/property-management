@@ -15,8 +15,8 @@ class BankAccountAdjustmentItem extends Model
     protected $fillable = ['account_id', 'adjustment_id', 'from', 'to'];
 
     protected $casts = [
-        'to' => 'float',
-        'from' => 'float',
+        'to' => 'integer',
+        'from' => 'integer',
     ];
 
     protected function amount(): Attribute

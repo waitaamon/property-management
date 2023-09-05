@@ -9,7 +9,6 @@ use App\Traits\HasLogs;
 use App\Models\Payments\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,8 +19,6 @@ class Tenant extends Model
     use HasFactory, SoftDeletes, HasLogs;
 
     protected $fillable = ['name', 'pin', 'phone', 'email', 'address'];
-
-    protected $appends = ['balance'];
 
     protected function lastPaymentDate(): Attribute
     {
@@ -56,7 +53,7 @@ class Tenant extends Model
         );
     }
 
-    public function balanceAsAt($date = null): float
+    public function balanceAsAt($date = null): int
     {
         $statement = $this->statements()
             ->when(!is_null($date), fn(Builder $query) => $query->whereDate('created_at', '<=', $date instanceof Carbon ? $date : Carbon::parse($date)))
@@ -76,9 +73,9 @@ class Tenant extends Model
         return $this->hasManyThrough(House::class, Lease::class);
     }
 
-    public function statements(): MorphMany
+    public function statements(): HasMany
     {
-        return $this->morphMany(AccountStatement::class, 'accountable');
+        return $this->hasMany(TenantStatement::class);
     }
 
     public function payments(): MorphMany

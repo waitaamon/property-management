@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('code')->nullable();
             $table->foreignId('tax_id')->constrained();
+            $table->foreignId('tenant_id')->constrained();
             $table->bigInteger('amount');
             $table->morphs('invoiceable');
+            $table->string('status')->default('pending approval');
             $table->timestamps();
             $table->softDeletes();
         });

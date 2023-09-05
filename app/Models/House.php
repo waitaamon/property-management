@@ -16,9 +16,9 @@ class House extends Model
     protected $fillable = ['property_id', 'name', 'description', 'deposit', 'rent', 'goodwill', 'is_active'];
 
     protected $casts = [
-        'rent' => 'float',
-        'deposit' => 'float',
-        'goodwill' => 'float',
+        'rent' => 'integer',
+        'deposit' => 'integer',
+        'goodwill' => 'integer',
         'is_active' => 'boolean',
     ];
 

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Lease;
 use App\Enums\ApprovalStatus;
+use App\Actions\CreateApproval;
 use App\Models\Invoices\Invoice;
 use App\Models\Expenses\Expense;
 use App\Models\Payments\Payment;
-use App\Jobs\CreateAccountStatement;
+use App\Actions\Rent\CreateRent;
+use App\Jobs\CreateTenantStatement;
+use App\Actions\Discount\CreateDeposit;
+use App\Actions\Goodwill\CreateGoodwill;
 use Illuminate\Database\Eloquent\Model;
-use App\Jobs\UpdateModelApprovalAction;
 use App\Jobs\CreateBankAccountTransaction;
 use App\Http\Requests\ApprovalActionRequest;
 use App\Models\Accounts\BankAccountAdjustment;
@@ -26,7 +29,7 @@ class ApprovalController extends Controller
 
         $this->executeApprovalAction($model);
 
-        UpdateModelApprovalAction::dispatch($model, auth()->user(), $this->getApprovalStatus(), request('note'));
+        CreateApproval::handle(model: $model, status: $this->getApprovalStatus(), note: $request->note);
 
         $this->toast('Successfully ' . $this->getApprovalStatus()->value . ' ' . str(request('modal'))->headline());
 
@@ -56,49 +59,71 @@ class ApprovalController extends Controller
 
     protected function executeApprovalAction(Model $model): void
     {
-        if ($this->getApprovalStatus() == ApprovalStatus::VOIDED) {
-            return;
+        $status = $this->getApprovalStatus();
+
+        if ($status == ApprovalStatus::VOIDED) return;
+
+        match (true) {
+            $model instanceof Lease => $this->handleLeaseProcesses($model, $status),
+            $model instanceof Expense => $this->handleExpenseProcesses($model, $status),
+            $model instanceof Invoice => $this->handleInvoiceProcesses($model, $status),
+            $model instanceof Payment => $this->handlePaymentProcesses($model, $status),
+            $model instanceof BankAccountAdjustment => $this->handleBankAccountAdjustmentProcesses($model, $status)
+        };
+    }
+
+    protected function handleLeaseProcesses(Lease $lease, ApprovalStatus $status)
+    {
+        if ($status == ApprovalStatus::APPROVED) {
+            CreateRent::handle(lease: $lease);
+            CreateDeposit::handle(lease: $lease);
+            CreateGoodwill::handle(lease: $lease);
+        }
+    }
+
+    protected function handleBankAccountAdjustmentProcesses(BankAccountAdjustment $adjustment, ApprovalStatus $status)
+    {
+        if ($status == ApprovalStatus::APPROVED) {
+            $adjustment->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, $adjustment->action));
         }
 
-        if ($this->getApprovalStatus() == ApprovalStatus::APPROVED) {
+        if ($status == ApprovalStatus::REVERSED) {
+            $adjustment->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, !$adjustment->action));
+        }
+    }
 
-            if ($model instanceof BankAccountAdjustment) {
-                $model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, $model->action));
-            }
-
-            if ($model instanceof Invoice) {
-                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
-            }
-
-
-            if ($model instanceof Payment) {
-                CreateBankAccountTransaction::dispatch($model, $model->action);
-                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
-            }
-
-            if ($model instanceof Expense) {
-                CreateBankAccountTransaction::dispatch($model, !$model->action);
-                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
-            }
+    protected function handlePaymentProcesses(Payment $payment, ApprovalStatus $status)
+    {
+        if ($status == ApprovalStatus::APPROVED) {
+            CreateBankAccountTransaction::dispatch($payment, $payment->action);
+            CreateTenantStatement::dispatch(model: $payment, tenant: $payment->tenant, amount: $payment->amount, description: 'payment', action: !$payment->action);
         }
 
-        if ($this->getApprovalStatus() == ApprovalStatus::REVERSED) {
-            if ($model instanceof BankAccountAdjustment) {
-                $model->items->each(fn($item) => CreateBankAccountTransaction::dispatch($item, !$model->action));
-            }
+        if ($status == ApprovalStatus::REVERSED) {
+            CreateBankAccountTransaction::dispatch($payment, !$payment->action);
+            CreateTenantStatement::dispatch(model: $payment, tenant: $payment->tenant, amount: $payment->amount, description: 'payment reversal', action: $payment->action);
+        }
+    }
 
-            if ($model instanceof Invoice) {
-                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
-            }
-            if ($model instanceof Payment) {
-                CreateBankAccountTransaction::dispatch($model, !$model->action);
-                CreateAccountStatement::dispatch($model, $model->amount, $model->action);
-            }
+    protected function handleExpenseProcesses(Expense $expense, ApprovalStatus $status)
+    {
+        if ($status == ApprovalStatus::APPROVED) {
+            CreateBankAccountTransaction::dispatch($expense, !$expense->action);
+        }
 
-            if ($model instanceof Expense) {
-                CreateBankAccountTransaction::dispatch($model, $model->action);
-                CreateAccountStatement::dispatch($model, $model->amount, !$model->action);
-            }
+        if ($status == ApprovalStatus::REVERSED) {
+            CreateBankAccountTransaction::dispatch($expense, $expense->action);
+        }
+    }
+
+    protected function handleInvoiceProcesses(Invoice $invoice, ApprovalStatus $status)
+    {
+        if ($status == ApprovalStatus::APPROVED) {
+            CreateTenantStatement::dispatch(model: $invoice, tenant: $invoice->tenant, amount: $invoice->amount, action: $invoice->action);
+        }
+
+        if ($status == ApprovalStatus::REVERSED) {
+            CreateTenantStatement::dispatch(model: $invoice, tenant: $invoice->tenant, amount: $invoice->amount, action: !$invoice->action);
         }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Tenants;
 
+use App\Models\Tenants\TenantStatement;
 use Inertia\Inertia;
 use App\Models\Tenants\Tenant;
 use App\Models\Invoices\Invoice;
 use App\Models\Payments\Payment;
 use App\Http\Controllers\Controller;
 use App\Repository\StatisticsRepository;
-use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\Tenants\TenantResource;
 use App\Http\Resources\Invoices\InvoiceResource;
@@ -139,7 +139,7 @@ class TenantController extends Controller
 
     protected function getTenantStatements(Tenant $tenant)
     {
-        $statements = AccountStatement::query()
+        $statements = $tenant->statements()
             ->with('statementable')
             ->whereHasMorph('accountable', [Tenant::class], fn($query) => $query->where('id', $tenant->id))
             ->when(request()->filled('from'), fn(Builder $query) => $query->whereDate('created_at', '>=', request()->date('from')))

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->morphs('approveable');
             $table->foreignId('user_id')->constrained();
             $table->string('status')->nullable();
+            $table->string('previous_status')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();

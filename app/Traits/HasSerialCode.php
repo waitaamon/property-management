@@ -24,7 +24,7 @@ trait HasSerialCode
             "App\Models\Payments\Payment" => 'PAY',
             "App\Models\Invoices\Invoice" => 'INV',
             "App\Models\Accounts\Transaction" => 'TRN',
-            "App\Models\Accounts\AccountStatement" => 'STM',
+            "App\Models\Tenants\TenantStatement" => 'T-STM',
             "App\Models\Accounts\BankAccountAdjustment" => 'B-ADJ',
         };
 

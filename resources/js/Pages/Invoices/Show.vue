@@ -23,15 +23,15 @@
 
                 <div class="space-y-3">
                     <template v-if="invoice.data.tenant">
-                        <p>Name: <span class="font-bold">{{ invoice.data.lease.tenant.name }}</span></p>
-                        <p>Phone: <span class="font-bold">{{ invoice.data.lease.tenant.phone }}</span></p>
-                        <p>Pin: <span class="font-bold">{{ invoice.data.lease.tenant.pin }}</span></p>
+                        <p>Name: <span class="font-bold">{{ invoice.data.tenant.name }}</span></p>
+                        <p>Phone: <span class="font-bold">{{ invoice.data.tenant.phone }}</span></p>
+                        <p>Pin: <span class="font-bold">{{ invoice.data.tenant.pin }}</span></p>
                     </template>
                 </div>
 
                 <div class="space-y-3">
                     <p>Invoice No: <span class="font-bold">{{ invoice.data.code }}</span></p>
-                    <p>Created By: <span class="font-bold">{{ invoice.data.user.name }}</span></p>
+                    <p>Created By: <span class="font-bold"></span></p>
                     <p>Invoice Date: <span class="font-bold">{{ moment(invoice.data.created_at).format('DD MMM Y HH:mm:ss') }}</span></p>
                     <p>Status: <span class="font-bold capitalize">{{ invoice.data.status }}</span></p>
                 </div>
@@ -43,6 +43,7 @@
                         <table-th>
                             #
                         </table-th>
+                        <table-th>Type</table-th>
                         <table-th>Property</table-th>
                         <table-th>House</table-th>
                         <table-th>Amount</table-th>
@@ -53,25 +54,26 @@
                             <table-td>
                                 1.
                             </table-td>
-                            <table-td>{{ invoice.data.lease.house.property.name }}</table-td>
-                            <table-td>{{ invoice.data.lease.house.name }}</table-td>
+                            <table-td class="capitalize"> {{ invoice.data.causer }}</table-td>
+                            <table-td> {{ property.name }}</table-td>
+                            <table-td>{{ invoice.data.invoiceable.lease.house.name }}</table-td>
                             <table-td>{{ invoice.data.amount.toLocaleString() }}</table-td>
                         </tr>
 
                         <tr style="margin-top: 5px;">
-                            <table-td colspan="2" />
+                            <table-td colspan="3"/>
                             <table-td class="font-semibold">Amount</table-td>
                             <table-td class="font-semibold">{{ invoice.data.amount.toLocaleString() }}</table-td>
                         </tr>
 
                         <tr style="margin-top: 5px;">
-                            <table-td colspan="2" />
+                            <table-td colspan="3"/>
                             <table-td class="font-semibold">{{ invoice.data.tax.name }}</table-td>
                             <table-td class="font-semibold">{{ invoice.data.tax_amount.toLocaleString() }}</table-td>
                         </tr>
 
                         <tr style="margin-top: 5px;">
-                            <table-td colspan="2" />
+                            <table-td colspan="3"/>
                             <table-td class="font-semibold">Total</table-td>
                             <table-td class="font-semibold">{{ invoice.data.total_amount.toLocaleString() }}</table-td>
                         </tr>
@@ -116,9 +118,13 @@ import DataTable from "@/Components/Table/DataTable.vue";
 import PrintButton from "@/Components/PrintButton.vue";
 import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
 import AppApprovalButtons from "@/Components/AppApprovalButtons.vue";
+import {computed} from "vue";
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     invoice: Object
 })
+
+const property = computed(() => usePage().props.user_properties.data.find(property => property.id === usePage().props.selected_property))
 
 </script>

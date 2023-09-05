@@ -12,10 +12,11 @@ class Approval extends Model
 {
     use HasFactory, HasLogs;
 
-    protected $fillable = ['user_id', 'note', 'status'];
+    protected $fillable = ['user_id', 'note', 'previous_status', 'status'];
 
     protected $casts = [
         'status' => ApprovalStatus::class,
+        'previous_status' => ApprovalStatus::class,
     ];
 
     public function approveable(): MorphTo

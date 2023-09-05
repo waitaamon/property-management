@@ -7,12 +7,12 @@ use App\Models\Tenants\Tenant;
 
 class StatisticsRepository
 {
-    public static function totalDebt(): float
+    public static function totalDebt(): int
     {
         return Tenant::withTrashed()->get()->sum('balance');
     }
 
-    public static function totalDebtAsAt($date = null): float
+    public static function totalDebtAsAt($date = null): int
     {
         if (is_null($date)) {
             return  self::totalDebt();
@@ -22,7 +22,7 @@ class StatisticsRepository
 
     }
 
-    public static function todayTotalExpenses(): float
+    public static function todayTotalExpenses(): int
     {
         return Expense::where('status', 'approved')->where('created_at', today())->sum('amount');
     }

@@ -99,7 +99,7 @@ class LeaseController extends Controller
     {
         $this->authorize('view', $lease);
 
-        $lease->load('tenant', 'house.property', 'user', 'approvals');
+        $lease->load('tenant', 'house.property', 'user', 'approvals.user');
 
         return Inertia::render('Leases/Show', [
             'lease' => new LeaseResource($lease)
@@ -136,7 +136,7 @@ class LeaseController extends Controller
         $houses = House::query()
             ->select('id', 'name', 'property_id')
             ->where('property_id', selectedProperty())
-            ->whereHas('leases', fn(Builder $query) => $query->where('end_date', null))
+            ->where(fn(Builder $builder) => $builder->whereRelation('leases', 'end_date', null)->orWhereDoesntHave('leases'))
             ->get();
 
         $tenants = Tenant::select('id', 'name')->get();

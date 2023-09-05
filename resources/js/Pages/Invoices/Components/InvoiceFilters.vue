@@ -2,17 +2,6 @@
     <table-filters>
         <form class="px-5 py-4 space-y-3" @submit.prevent="submit">
             <div>
-                <InputLabel for="account" value="Filter by bank account"/>
-                <v-select
-                    v-model="form.account"
-                    :options="$page.props.accounts.data"
-                    :reduce="account => account.id"
-                    class="mt-1 block w-full h-full"
-                    label="name"
-                />
-            </div>
-
-            <div>
                 <InputLabel for="tenant" value="Filter by bank tenant"/>
                 <v-select
                     v-model="form.tenant"
@@ -64,8 +53,7 @@ const form = reactive({
     to: props.filters.to,
     from: props.filters.from,
     status: props.filters.status ? props.filters.status : '',
-    user: props.filters.user ? parseInt(props.filters.user) : '',
-    account_type: props.filters.account_type ? props.filters.account_type : '',
+    tenant: props.filters.tenant ? parseInt(props.filters.tenant) : '',
 })
 
 const submit = () => emits('updateFilters', toRaw(form))

@@ -7,14 +7,13 @@ use App\Traits\HasLogs;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
+use App\Models\Invoices\Invoice;
 use App\Models\Accounts\BankAccount;
-use App\Models\Accounts\Transaction;
-use App\Models\Accounts\AccountStatement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphOne};
 
 class Expense extends Model
 {
@@ -23,7 +22,7 @@ class Expense extends Model
     protected $fillable = ['code', 'expense_category_id', 'bank_account_id', 'user_id', 'amount', 'status', 'note'];
 
     protected $casts = [
-        'amount' => 'float',
+        'amount' => 'integer',
         'status' => ApprovalStatus::class
     ];
 
@@ -47,13 +46,8 @@ class Expense extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function statements(): MorphMany
+    public function invoice(): MorphOne
     {
-        return $this->morphMany(AccountStatement::class, 'statementable');
-    }
-
-    public function transactions(): MorphMany
-    {
-        return $this->morphMany(Transaction::class, 'transactionable');
+        return $this->morphOne(Invoice::class, 'invoiceable');
     }
 }

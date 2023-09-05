@@ -15,8 +15,6 @@ class BankAccount extends Model
 
     protected $fillable = ['name'];
 
-    protected $appends = ['balance'];
-
     protected function balance(): Attribute
     {
         return new Attribute(

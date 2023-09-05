@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_statements', function (Blueprint $table) {
+        Schema::create('tenant_statements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
             $table->morphs('statementable');
-            $table->nullableMorphs('accountable');
+            $table->foreignId('tenant_id');
             $table->decimal('amount');
             $table->decimal('balance');
             $table->boolean('action')->default(true);
+            $table->string('description')->default('invoice');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_statements');
+        Schema::dropIfExists('tenant_statements');
     }
 };

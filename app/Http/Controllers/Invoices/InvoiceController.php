@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Invoices;
 
 use App\Models\House;
-use App\Models\Tax;
 use Inertia\Inertia;
 use App\Enums\ApprovalStatus;
 use App\Models\Tenants\Tenant;
@@ -25,10 +24,8 @@ class InvoiceController extends Controller
         $this->authorize('viewAny', Invoice::class);
 
         $invoices = Invoice::query()
-            ->with('lease.tenant', 'lease.house.property')
-            ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
-            ->when(request()->filled('tenant'), fn(Builder $query) => $query->whereRelation('lease', 'tenant_id', request('tenant')))
-            ->when(request()->filled('house'), fn(Builder $query) => $query->whereRelation('lease', 'house_id', request('house')))
+            ->with(['tenant:id,name', 'invoiceable'])
+            ->when(request()->filled('tenant'), fn(Builder $query) => $query->where('tenant_id', request('tenant')))
             ->when(request()->filled('to'), fn(Builder $query) => $query->whereDate('created_at', '<=', request()->date('to')))
             ->when(request()->filled('from'), fn(Builder $query) => $query->whereDate('created_at', '>=', request()->date('from')))
             ->when(request()->filled('search'), fn($query) => $query->search(['code'], request('search')))
@@ -72,7 +69,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('view', $invoice);
 
-        $invoice->load(['user', 'tax', 'lease' => ['tenant', 'house' => ['property']], 'approvals' => ['user']]);
+        $invoice->load(['tax', 'tenant', 'invoiceable']);
 
         return Inertia::render('Invoices/Show', [
             'invoice' => new InvoiceResource($invoice)
