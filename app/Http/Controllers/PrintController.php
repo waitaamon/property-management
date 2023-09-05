@@ -36,7 +36,6 @@ class PrintController extends Controller
 
     protected function generatePrintablePdf($model)
     {
-
         $setting = Setting::query()->first();
 
         $view = 'prints.' . request('type');
@@ -50,7 +49,7 @@ class PrintController extends Controller
     {
         return match (request('type')) {
             'payment' => Payment::with('bankAccount', 'tenant', 'user')->findOrFail(request('id')),
-            'invoice' => Invoice::with('user', 'lease.tenant', 'lease.house.property')->findOrFail(request('id')),
+            'invoice' => Invoice::with('user', 'tenant', 'invoiceable')->findOrFail(request('id')),
         };
     }
 }

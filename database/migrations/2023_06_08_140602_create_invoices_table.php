@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('code')->nullable();
             $table->foreignId('tax_id')->constrained();
             $table->foreignId('tenant_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->bigInteger('amount');
             $table->morphs('invoiceable');
             $table->string('status')->default('pending approval');

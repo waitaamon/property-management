@@ -7,6 +7,7 @@ use App\Models\Deposit;
 use App\Models\Goodwill;
 use App\Models\Rent;
 use App\Models\Tax;
+use App\Models\User;
 use App\Traits\HasApproval;
 use App\Traits\HasLogs;
 use App\Traits\HasSerialCode;
@@ -22,7 +23,7 @@ class Invoice extends Model
 {
     use HasFactory, SoftDeletes, HasSerialCode, HasLogs, HasApproval;
 
-    protected $fillable = ['code', 'tenant_id', 'amount', 'tax_id', 'status'];
+    protected $fillable = ['code', 'tenant_id', 'amount', 'tax_id', 'status', 'user_id'];
 
     protected $casts = [
         'amount' => 'integer',
@@ -68,6 +69,11 @@ class Invoice extends Model
     public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function statements(): MorphMany

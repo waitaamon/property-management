@@ -39,4 +39,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::controller(\App\Http\Controllers\Properties\PropertyActionsController::class)->group(function (){
         Route::post('update-selected-property', 'updateSelected')->name('update-selected-property');
     });
+
+    Route::controller(\App\Http\Controllers\Invoices\InvoiceActionsController::class)->group(function (){
+        Route::get('export-invoices-excel', 'excel')->name('export-invoices-excel');
+    });
 });

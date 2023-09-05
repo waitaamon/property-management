@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.14",
         "laravel/tinker": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "opcodesio/log-viewer": "^2.4",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-backup": "^8.3",
