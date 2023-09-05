@@ -15,7 +15,7 @@
 
                 <div class="grid grid-cols-2 gap-6">
 
-                    <div class="col-span-2">
+                    <div class="col-span-1">
                         <InputLabel for="tenant" value="Tenant"/>
 
                         <v-select
@@ -28,6 +28,20 @@
                         />
 
                         <InputErrorMessage name="tenant"/>
+                    </div>
+
+                    <div class="col-span-1">
+                        <InputLabel for="type" value="Invoice type"/>
+
+                        <v-select
+                            id="type"
+                            v-model="form.type"
+                            :options="$page.props.types"
+                            class="mt-1 block w-full"
+                            :disabled="invoice !== undefined"
+                        />
+
+                        <InputErrorMessage name="type"/>
                     </div>
 
                     <div class="col-span-1">
@@ -50,19 +64,7 @@
                         <text-input-group v-model="form.amount" label="Amount" name="amount" type="number"/>
                     </div>
 
-                    <div class="col-span-1">
-                        <text-input-group v-model="form.from" label="From" name="from" type="date"/>
-                    </div>
-
-                    <div class="col-span-1">
-                        <text-input-group v-model="form.to" label="To" name="to" type="date"/>
-                    </div>
-
-                    <div class="col-span-2">
-                        <text-area-input v-model="form.note" label="Note" name="note"/>
-                    </div>
                 </div>
-
 
                 <div class="mt-4">
 
@@ -95,12 +97,10 @@ let form = useForm({})
 
 watch(() => props.invoice, val => {
     form = useForm({
-        to: val ? val.data.to : '',
-        note: val ? val.data.note : '',
-        from: val ? val.data.from : '',
         amount: val ? val.data.amount : 0,
-        lease: val ? val.data.lease.id : '',
-        tenant: val ? val.data.lease.tenant.id : '',
+        type: val ? val.data.causer : 'rent',
+        tenant: val ? val.data.tenant.id : '',
+        lease: val ? val.data.invoiceable.lease.id : '',
     })
 }, {immediate: true})
 

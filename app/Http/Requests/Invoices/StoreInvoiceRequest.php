@@ -12,9 +12,7 @@ class StoreInvoiceRequest extends FormRequest
             'tenant' => ['required', 'integer', 'exists:tenants,id'],
             'lease' => ['required', 'integer', 'exists:leases,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'note' => ['nullable', 'string'],
-            'from'=> ['required', 'date'],
-            'to'=> ['required', 'date'],
+            'type' => ['required', 'in:rent,deposit,goodwill'],
         ];
     }
 

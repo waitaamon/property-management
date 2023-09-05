@@ -2,15 +2,15 @@
 
 namespace App\Models\Invoices;
 
-use App\Enums\ApprovalStatus;
-use App\Models\Deposit;
-use App\Models\Goodwill;
-use App\Models\Rent;
 use App\Models\Tax;
+use App\Models\Rent;
 use App\Models\User;
-use App\Traits\HasApproval;
+use App\Models\Deposit;
 use App\Traits\HasLogs;
+use App\Models\Goodwill;
+use App\Traits\HasApproval;
 use App\Traits\HasSerialCode;
+use App\Enums\ApprovalStatus;
 use App\Models\Tenants\Tenant;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Tenants\TenantStatement;

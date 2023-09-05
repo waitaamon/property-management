@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Invoices;
 
+use App\Actions\Discount\CreateDeposit;
+use App\Actions\Goodwill\CreateGoodwill;
+use App\Actions\Rent\CreateRent;
 use App\Models\House;
+use App\Models\Lease;
+use App\Models\Rent;
 use Inertia\Inertia;
 use App\Enums\ApprovalStatus;
 use App\Models\Tenants\Tenant;
@@ -58,7 +63,13 @@ class InvoiceController extends Controller
     {
         $this->authorize('create', Invoice::class);
 
-        CreateInvoice::handle($request->validated());
+        $lease = Lease::findOrFail($request->lease);
+
+        match ($request->type) {
+          'rent' => CreateRent::handle($lease, $request->amount, $request->date('date')),
+          'deposit' => CreateDeposit::handle($lease, $request->amount),
+          'goodwill' => CreateGoodwill::handle($lease, $request->amount),
+        };
 
         $this->toast('Successfully created invoice.');
 
@@ -80,7 +91,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('update', $invoice);
 
-        $invoice->load(['lease' => ['tenant', 'house']]);
+        $invoice->load(['invoiceable', 'tenant']);
 
         return Inertia::render('Invoices/Create', [
             ...$this->createEditData(),
@@ -113,6 +124,7 @@ class InvoiceController extends Controller
         $tenants = Tenant::with('leases')->select('id', 'name')->get();
 
         return [
+            'types' => ['rent', 'deposit', 'goodwill'],
             'tenants' => TenantResource::collection($tenants),
         ];
     }

@@ -8,13 +8,13 @@ use App\Actions\Invoices\CreateInvoice;
 
 class CreateDeposit
 {
-    public static function handle(Lease $lease): Deposit
+    public static function handle(Lease $lease, int $amount = null): Deposit
     {
         $deposit = $lease->deposit()->create([
-            'amount' => $lease->house->deposit,
+            'amount' => $amount ?: $lease->house->deposit,
         ]);
 
-        CreateInvoice::handle(model: $deposit, tenant: $lease->tenant, amount: $deposit->amount);
+        CreateInvoice::handle(model: $deposit, tenant: $lease->tenant, amount: $amount ?: $deposit->amount);
 
         return $deposit;
     }

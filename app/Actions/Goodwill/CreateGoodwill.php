@@ -8,13 +8,13 @@ use App\Actions\Invoices\CreateInvoice;
 
 class CreateGoodwill
 {
-    public static function handle(Lease $lease): Goodwill
+    public static function handle(Lease $lease, int $amount = null): Goodwill
     {
         $goodwill = $lease->goodwill()->create([
-            'amount' => $lease->house->goodwill,
+            'amount' => $amount ?: $lease->house->goodwill,
         ]);
 
-        CreateInvoice::handle(model: $goodwill, tenant: $lease->tenant, amount: $goodwill->amount);
+        CreateInvoice::handle(model: $goodwill, tenant: $lease->tenant, amount: $amount ?: $goodwill->amount);
 
         return $goodwill;
     }

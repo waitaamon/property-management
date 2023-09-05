@@ -43,4 +43,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::controller(\App\Http\Controllers\Invoices\InvoiceActionsController::class)->group(function (){
         Route::get('export-invoices-excel', 'excel')->name('export-invoices-excel');
     });
+
+    Route::controller(\App\Http\Controllers\Leases\LeaseActionsController::class)->group(function (){
+        Route::get('export-leases-excel', 'excel')->name('export-leases-excel');
+    });
 });

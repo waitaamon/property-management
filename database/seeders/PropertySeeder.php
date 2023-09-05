@@ -32,7 +32,7 @@ class PropertySeeder extends Seeder
 
         collect($properties)->each(function ($property) {
             $savedProperty = Property::create(['name' => $property['name'], 'location' => $property['location']]);
-            $savedProperty->houses()->create(...$property['houses']);
+            collect($property['houses'])->each(fn($house) => $savedProperty->houses()->create([...$house]));
         });
 
     }
