@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Payments;
 
 use Inertia\Inertia;
+use App\Models\Property;
 use App\Enums\ApprovalStatus;
-use App\Models\Tenants\Tenant;
 use App\Models\Payments\Payment;
 use App\Models\Accounts\BankAccount;
 use App\Http\Controllers\Controller;
@@ -36,11 +36,13 @@ class PaymentController extends Controller
             ->paginate(request('perPage', 10))
             ->withQueryString();
 
+        $property = Property::find(selectedProperty());
+
         return Inertia::render('Payments/Index', [
             'filters' => request()->all(),
             'statuses' => ApprovalStatus::cases(),
             'payments' => PaymentResource::collection($payments),
-            'tenants' => TenantResource::collection(Tenant::select('id', 'name')->get()),
+            'tenants' => TenantResource::collection($property->tenants),
             'accounts' => BankAccountResource::collection(BankAccount::select('id', 'name')->get()),
             'can' => [
                 'create' => auth()->user()->can('create', Payment::class)
@@ -113,11 +115,11 @@ class PaymentController extends Controller
 
     protected function createEditData(): array
     {
-        $tenants = Tenant::select('id', 'name')->get();
+        $property = Property::find(selectedProperty());
         $accounts = BankAccount::select('id', 'name')->get();
 
         return [
-            'tenants' => TenantResource::collection($tenants),
+            'tenants' => TenantResource::collection($property->tenants),
             'accounts' => BankAccountResource::collection($accounts),
         ];
     }

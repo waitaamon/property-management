@@ -4,10 +4,10 @@ namespace App\Models\Expenses;
 
 use App\Models\User;
 use App\Traits\HasLogs;
+use App\Models\Property;
 use App\Traits\HasApproval;
 use App\Enums\ApprovalStatus;
 use App\Traits\HasSerialCode;
-use App\Models\Invoices\Invoice;
 use App\Models\Accounts\BankAccount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,13 +41,13 @@ class Expense extends Model
         return $this->belongsTo(BankAccount::class);
     }
 
+    public function property(): BelongsTo
+    {
+        return $this->belongsTo(Property::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function invoice(): MorphOne
-    {
-        return $this->morphOne(Invoice::class, 'invoiceable');
     }
 }

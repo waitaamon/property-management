@@ -49,6 +49,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('export-payments-excel', 'excel')->name('export-payments-excel');
     });
 
+    Route::controller(\App\Http\Controllers\Expenses\ExpenseActionsController::class)->group(function (){
+        Route::get('export-expenses-excel', 'excel')->name('export-expenses-excel');
+    });
+
     //Reports
     Route::controller(\App\Http\Controllers\Reports\DepositReportController::class)->group(function (){
         Route::get('deposit-report', 'index')->name('deposit-report');

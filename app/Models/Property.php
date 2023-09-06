@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasLogs;
+use App\Enums\ApprovalStatus;
+use App\Models\Tenants\Tenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +20,12 @@ class Property extends Model
 
     public function tenants(): Attribute
     {
-        return Attribute::get(fn() => $this->leases()->with('tenant')->whereNull('end_date')->get());
+        return Attribute::get(function () {
+            return Tenant::query()
+                ->whereRelation('leases.house.property', 'id', $this->id)
+                ->whereRelation('leases', 'status', ApprovalStatus::APPROVED)
+                ->get();
+        });
     }
 
     public function vacantHouses(): Attribute
