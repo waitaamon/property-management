@@ -13,8 +13,6 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        if (app()->environment('production')) return;
-
         $properties = [
             ['name' => 'Embakasi Tower', 'location' => 'Pipeline',
                 'houses' => [
@@ -32,7 +30,9 @@ class PropertySeeder extends Seeder
 
         collect($properties)->each(function ($property) {
             $savedProperty = Property::create(['name' => $property['name'], 'location' => $property['location']]);
-            collect($property['houses'])->each(fn($house) => $savedProperty->houses()->create([...$house]));
+            if (app()->environment('local')) {
+                collect($property['houses'])->each(fn($house) => $savedProperty->houses()->create([...$house]));
+            }
         });
 
     }

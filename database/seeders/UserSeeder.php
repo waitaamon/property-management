@@ -27,6 +27,10 @@ class UserSeeder extends Seeder
             [
                 'name' => 'John Migwi',
                 'email' => 'migwimwangi@gmail.com',
+            ],
+            [
+                'name' => 'Kaimba Mwiti	',
+                'email' => 'kaimbamwiti@gmail.com',
             ]
         ];
 
