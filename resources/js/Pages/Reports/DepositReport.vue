@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="flex space-x-2">
-                    <table-export v-if="deposits.data.length" :payload="selected" route-name="deposits"/>
+                    <table-export v-if="deposits.data.length" :payload="selected" route-name="deposit-report"/>
 
                 </div>
             </div>
@@ -31,23 +31,21 @@
                     <table-th>Tenant</table-th>
                     <table-th>House</table-th>
                     <table-th>Amount</table-th>
+                    <table-th>Refund Date</table-th>
                     <table-th>Date</table-th>
-                    <table-th>Actions</table-th>
                 </slot>
 
                 <tr v-if="deposits.data.length" v-for="deposit in deposits.data" :key="deposit.id">
                     <table-td>
                         <Checkbox :id="deposit.id" v-model:checked="selected" :value="deposit.id"/>
                     </table-td>
-                    <table-td>{{ deposit.code }}</table-td>
-                    <table-td class="capitalize">{{ deposit.causer }}</table-td>
-                    <table-td class="capitalize">{{ deposit.tenant.name }}</table-td>
-                    <table-td class="capitalize">{{ deposit.depositable.lease.house.name }}</table-td>
+                    <table-td class="capitalize">{{ deposit.lease.tenant.name }}</table-td>
+                    <table-td class="capitalize">{{ deposit.lease.house.name }}</table-td>
                     <table-td class="capitalize">{{ deposit.amount.toLocaleString() }}</table-td>
-                    <table-td class="capitalize">{{ deposit.status}}</table-td>
+                    <table-td class="capitalize">{{ deposit.refund_date ? moment(deposit.refund_date).format('DD MMM Y') : '' }}</table-td>
                     <table-td class="capitalize">{{ moment(deposit.created_at).format('DD MMM Y HH:mm:ss') }}</table-td>
                 </tr>
-                <table-no-data-tr v-else colspan="8" />
+                <table-no-data-tr v-else colspan="6" />
             </data-table>
 
             <div class="mt-4">
@@ -73,7 +71,6 @@ import Pagination from "@/Components/Pagination.vue"
 import DataTable from "@/Components/Table/DataTable.vue"
 import TableExport from "@/Components/Table/TableExport.vue";
 import TableNoDataTr from "@/Components/Table/TableNoDataTr.vue";
-
 
 const props = defineProps({
     deposits: Object,

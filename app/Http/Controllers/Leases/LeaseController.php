@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Leases;
 
+use App\Models\Property;
 use Inertia\Inertia;
 use App\Models\House;
 use App\Models\Lease;
@@ -133,16 +134,12 @@ class LeaseController extends Controller
 
     protected function createEditData(): array
     {
-        $houses = House::query()
-            ->select('id', 'name', 'property_id')
-            ->where('property_id', selectedProperty())
-            ->where(fn(Builder $builder) => $builder->whereRelation('leases', 'end_date', null)->orWhereDoesntHave('leases'))
-            ->get();
+        $property = Property::find(selectedProperty());
 
         $tenants = Tenant::select('id', 'name')->get();
 
         return [
-            'houses' => HouseResource::collection($houses),
+            'houses' => HouseResource::collection($property->vacant_houses),
             'tenants' => TenantResource::collection($tenants),
         ];
     }

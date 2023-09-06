@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('debug', \App\Http\Controllers\DebugController::class);
 
@@ -48,5 +47,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::controller(\App\Http\Controllers\Payments\PaymentActionsController::class)->group(function (){
         Route::get('export-payments-excel', 'excel')->name('export-payments-excel');
+    });
+
+    //Reports
+    Route::controller(\App\Http\Controllers\Reports\DepositReportController::class)->group(function (){
+        Route::get('deposit-report', 'index')->name('deposit-report');
+        Route::get('export-deposit-report-excel', 'excel')->name('export-deposit-report-excel');
     });
 });

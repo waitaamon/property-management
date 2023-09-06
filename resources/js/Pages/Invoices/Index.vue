@@ -66,7 +66,7 @@
                         </button>
                     </table-td>
                 </tr>
-                <table-no-data-tr v-else colspan="8" />
+                <table-no-data-tr v-else colspan="9" />
             </data-table>
 
             <div class="mt-4">
