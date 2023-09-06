@@ -40,7 +40,7 @@ import {ChevronDownIcon} from '@heroicons/vue/24/solid'
 import {Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 
 const dropdownItems = [
-    // {name: 'Debtors Report', route: 'debtors-report'},
+    {name: 'Debtors Report', route: 'debtors-report'},
     {name: 'Deposits Report', route: 'deposit-report'},
     // {name: 'Invoice Report', route: 'invoices-report'},
     // {name: 'Vat Report', route: 'vat-report'},

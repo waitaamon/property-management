@@ -54,4 +54,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('deposit-report', 'index')->name('deposit-report');
         Route::get('export-deposit-report-excel', 'excel')->name('export-deposit-report-excel');
     });
+
+    Route::controller(\App\Http\Controllers\Reports\DebtorsReportController::class)->group(function (){
+        Route::get('debtors-report', 'index')->name('debtors-report');
+        Route::get('export-debtors-report-excel', 'excel')->name('export-debtors-report-excel');
+    });
 });
