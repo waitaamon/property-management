@@ -14,6 +14,7 @@ class CreatePayment
             'note' => $payload['note'],
             'amount' => $payload['amount'],
             'tenant_id' => $payload['tenant'],
+            'property_id' => selectedProperty(),
             'bank_account_id' => $payload['account'],
         ]);
     }

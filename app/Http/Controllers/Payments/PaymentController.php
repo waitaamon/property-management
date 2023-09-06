@@ -25,6 +25,7 @@ class PaymentController extends Controller
 
         $payments = Payment::query()
             ->with('tenant', 'bankAccount:id,name')
+            ->where('property_id', selectedProperty())
             ->when(request()->filled('status'), fn(Builder $query) => $query->where('status', request('status')))
             ->when(request()->filled('tenant'), fn(Builder $query) => $query->where('tenant_id', request('tenant')))
             ->when(request()->filled('account'), fn(Builder $query) => $query->where('bank_account_id', request('account')))
